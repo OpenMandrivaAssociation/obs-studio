@@ -18,7 +18,7 @@ License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
 Source0:	https://github.com/jp9000/obs-studio/archive/%{name}-%{version}.tar.gz
-Patch0:		%{name}-20.0.1-linkage.patch
+Patch0:		%{name}-21.0.3-linkage.patch
 BuildRequires:	cmake
 BuildRequires:	qmake5
 BuildRequires:	freetype-devel
