@@ -173,10 +173,3 @@ Frontend-api library for %{name}.
 
 %install
 %makeinstall_std -C build
-
-%changelog
-
-* Sun Oct 08 2017 Giovanni Mariani <mc2374@mclink.it> 20.0.1-1
-- (287c532) Updated to release 20.0.1, updated BReqs according to the configure output and rediffed P0
-
-
