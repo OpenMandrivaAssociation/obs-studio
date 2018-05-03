@@ -12,12 +12,12 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	21.0.3
+Version:	21.1.1
 Release:	1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
-Source0:	https://github.com/jp9000/obs-studio/archive/%{name}-%{version}.tar.gz
+Source0:	https://github.com/obsproject/%{name}/archive/%{version}.tar.gz
 Patch0:		%{name}-21.0.3-linkage.patch
 BuildRequires:	cmake
 BuildRequires:	qmake5
