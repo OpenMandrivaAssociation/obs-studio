@@ -12,13 +12,13 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	20.0.1
+Version:	21.1.1
 Release:	1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
-Source0:	https://github.com/jp9000/obs-studio/archive/%{name}-%{version}.tar.gz
-Patch0:		%{name}-20.0.1-linkage.patch
+Source0:	https://github.com/obsproject/%{name}/archive/%{version}.tar.gz
+Patch0:		%{name}-21.0.3-linkage.patch
 BuildRequires:	cmake
 BuildRequires:	qmake5
 BuildRequires:	freetype-devel
@@ -158,7 +158,7 @@ Frontend-api library for %{name}.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch0 -p0
 
 
 %build
@@ -173,10 +173,3 @@ Frontend-api library for %{name}.
 
 %install
 %makeinstall_std -C build
-
-%changelog
-
-* Sun Oct 08 2017 Giovanni Mariani <mc2374@mclink.it> 20.0.1-1
-- (287c532) Updated to release 20.0.1, updated BReqs according to the configure output and rediffed P0
-
-
