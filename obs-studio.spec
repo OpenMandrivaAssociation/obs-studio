@@ -157,7 +157,7 @@ Frontend-api library for %{name}.
 #----------------------------------------------------------------------------
 
 %prep
-%setup -q
+%setup -qn %{name}-%{version}
 %patch0 -p0
 
 
