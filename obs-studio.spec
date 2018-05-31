@@ -17,7 +17,8 @@ Release:	1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
-Source0:	https://github.com/obsproject/%{name}/archive/%{version}.tar.gz
+#Source0:	https://github.com/obsproject/%{name}/archive/%{version}.tar.gz
+Source0:	%{name}-%{version}.tar.gz
 Patch0:		%{name}-21.0.3-linkage.patch
 BuildRequires:	cmake
 BuildRequires:	qmake5
