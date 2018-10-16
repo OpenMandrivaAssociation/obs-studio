@@ -57,6 +57,9 @@ BuildRequires:	pkgconfig(xcb-xfixes)
 BuildRequires:	pkgconfig(xcb-xinerama)
 BuildRequires:	pkgconfig(xcomposite)
 BuildRequires:	pkgconfig(xfixes)
+BuildRequires:	swig
+BuildRequires:	mbedtls-devel
+
 # Used via dlopen() so require them, otherwise they don't get installed
 Requires:	%{libobsopengl} = %{EVRD}
 Requires:	%{libobs} = %{EVRD}
