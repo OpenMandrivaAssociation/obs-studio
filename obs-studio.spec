@@ -18,7 +18,7 @@ License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
 Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-Patch0:		%{name}-21.0.3-linkage.patch
+Patch0:		%{name}-22.0.2-linkage.patch
 BuildRequires:	cmake
 BuildRequires:	qmake5
 BuildRequires:	freetype-devel
@@ -161,7 +161,7 @@ Frontend-api library for %{name}.
 
 %prep
 %setup -q
-%patch0 -p0
+%patch0 -p1
 
 
 %build
