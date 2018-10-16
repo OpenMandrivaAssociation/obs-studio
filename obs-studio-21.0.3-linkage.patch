@@ -2,17 +2,6 @@ Index: libobs/CMakeLists.txt
 ===================================================================
 --- libobs/CMakeLists.txt
 +++ libobs/CMakeLists.txt	2018-03-09 23:07:01.583210027 +0100
-@@ -11,6 +11,10 @@
- 	list(REMOVE_ITEM FFMPEG_LIBRARIES ${FFMPEG_AVCODEC_LIBRARIES})
- endif()
- 
-+find_package(XCB COMPONENTS XCB REQUIRED RANDR REQUIRED XINERAMA REQUIRED)
-+
-+find_package(X11 REQUIRED)
-+
- if(UNIX)
- 	if (NOT APPLE)
- 		find_package(PulseAudio)
 @@ -463,6 +467,11 @@
  		${OBS_JANSSON_IMPORT}
  		${FFMPEG_LIBRARIES}

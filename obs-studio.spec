@@ -12,13 +12,13 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	21.1.1
+Version:	22.0.3
 Release:	1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
-Source0:	https://github.com/obsproject/%{name}/archive/%{version}.tar.gz
-Patch0:		%{name}-21.0.3-linkage.patch
+Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+Patch0:		%{name}-22.0.2-linkage.patch
 BuildRequires:	cmake
 BuildRequires:	qmake5
 BuildRequires:	freetype-devel
@@ -57,6 +57,9 @@ BuildRequires:	pkgconfig(xcb-xfixes)
 BuildRequires:	pkgconfig(xcb-xinerama)
 BuildRequires:	pkgconfig(xcomposite)
 BuildRequires:	pkgconfig(xfixes)
+BuildRequires:	swig
+BuildRequires:	mbedtls-devel
+
 # Used via dlopen() so require them, otherwise they don't get installed
 Requires:	%{libobsopengl} = %{EVRD}
 Requires:	%{libobs} = %{EVRD}
@@ -158,10 +161,13 @@ Frontend-api library for %{name}.
 
 %prep
 %setup -q
-%patch0 -p0
+%patch0 -p1
 
 
 %build
+export CC=gcc
+export CXX=g++
+
 %cmake	-DUNIX_STRUCTURE=1 \
 %ifarch x86_64
 		-DOBS_MULTIARCH_SUFFIX=64
