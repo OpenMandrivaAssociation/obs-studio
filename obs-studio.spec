@@ -162,6 +162,9 @@ Frontend-api library for %{name}.
 
 
 %build
+export CC=gcc
+export CXX=g++
+
 %cmake	-DUNIX_STRUCTURE=1 \
 %ifarch x86_64
 		-DOBS_MULTIARCH_SUFFIX=64
