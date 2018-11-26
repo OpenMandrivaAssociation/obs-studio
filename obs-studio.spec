@@ -19,7 +19,7 @@ Group:		Video
 Url:		https://obsproject.com
 Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:		%{name}-22.0.2-linkage.patch
-BuildRequires:	cmake
+BuildRequires:	cmake ninja
 BuildRequires:	qmake5
 BuildRequires:	freetype-devel
 BuildRequires:	pkgconfig(alsa)
@@ -57,6 +57,8 @@ BuildRequires:	pkgconfig(xcb-xfixes)
 BuildRequires:	pkgconfig(xcb-xinerama)
 BuildRequires:	pkgconfig(xcomposite)
 BuildRequires:	pkgconfig(xfixes)
+BuildRequires:	pkgconfig(python3)
+BuildRequires:	pkgconfig(lua)
 BuildRequires:	swig
 BuildRequires:	mbedtls-devel
 
@@ -77,6 +79,8 @@ This package is in the Restricted repository because it requires x264 codec.
 %{_iconsdir}/hicolor/*/apps/%{oname}.png
 %dir %{_libdir}/%{oname}-plugins/
 %{_libdir}/%{oname}-plugins/*.so
+%{_libdir}/libobs-scripting.so
+%{_libdir}/obs-scripting
 
 #----------------------------------------------------------------------------
 
@@ -160,22 +164,17 @@ Frontend-api library for %{name}.
 #----------------------------------------------------------------------------
 
 %prep
-%setup -q
-%patch0 -p1
-
+%autosetup -p1
 
 %build
-export CC=gcc
-export CXX=g++
+#export CC=gcc
+#export CXX=g++
 
 %cmake	-DUNIX_STRUCTURE=1 \
-%ifarch x86_64
-		-DOBS_MULTIARCH_SUFFIX=64
-%else
-		-DOBS_MULTIARCH_SUFFIX=
-%endif
-%make
+	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
+	-G Ninja
+%ninja_build
 
 
 %install
-%makeinstall_std -C build
+%ninja_install -C build
