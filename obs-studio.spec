@@ -62,6 +62,9 @@ BuildRequires:	pkgconfig(lua)
 BuildRequires:	swig
 BuildRequires:	mbedtls-devel
 
+#Libva is needed for enable hardware encoding via vaapi. Make it recommends due to lack of libva on some arch (penguin).
+Recommends:	va2
+
 # Used via dlopen() so require them, otherwise they don't get installed
 Requires:	%{libobsopengl} = %{EVRD}
 Requires:	%{libobs} = %{EVRD}
@@ -168,8 +171,11 @@ Frontend-api library for %{name}.
 %autosetup -n %{name}-%{version}-rc1 -p1
 
 %build
+# Clang build fine only on znver1, on other arch fail. So for znver1 use Clang, for rest GCC (penguin).
+%ifnarch znver1
 export CC=gcc
 export CXX=g++
+%endif
 
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
