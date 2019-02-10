@@ -168,8 +168,8 @@ Frontend-api library for %{name}.
 %autosetup -n %{name}-%{version}-rc1 -p1
 
 %build
-#export CC=gcc
-#export CXX=g++
+export CC=gcc
+export CXX=g++
 
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
