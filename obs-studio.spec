@@ -147,7 +147,7 @@ Development files for %{name}
 %{_libdir}/libobs-frontend-api.so
 %dir %{_libdir}/cmake/LibObs
 %{_libdir}/cmake/LibObs/*.cmake
-%{_libdir}/pkgconfig/libobs.pc
+/usr/lib/pkgconfig/libobs.pc
 
 #----------------------------------------------------------------------------
 
