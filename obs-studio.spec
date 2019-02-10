@@ -164,7 +164,7 @@ Frontend-api library for %{name}.
 #----------------------------------------------------------------------------
 
 %prep
-%autosetup -q-n %{name}-%{version}-rc1 -p1
+%autosetup -n %{name}-%{version}-rc1 -p1
 
 %build
 #export CC=gcc
