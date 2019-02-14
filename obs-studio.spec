@@ -13,7 +13,7 @@
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
 Version:	22.0.3
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
@@ -167,8 +167,8 @@ Frontend-api library for %{name}.
 %autosetup -p1
 
 %build
-#export CC=gcc
-#export CXX=g++
+export CC=gcc
+export CXX=g++
 
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
