@@ -12,8 +12,8 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	22.0.3
-Release:	2
+Version:	23.0.0
+Release:	1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
@@ -61,6 +61,9 @@ BuildRequires:	pkgconfig(python3)
 BuildRequires:	pkgconfig(lua)
 BuildRequires:	swig
 BuildRequires:	mbedtls-devel
+
+#Libva is needed for enable hardware encoding via vaapi. Make it recommends due to lack of libva on some arch (penguin).
+Recommends:	va2
 
 # Used via dlopen() so require them, otherwise they don't get installed
 Requires:	%{libobsopengl} = %{EVRD}
@@ -147,6 +150,7 @@ Development files for %{name}
 %{_libdir}/libobs-frontend-api.so
 %dir %{_libdir}/cmake/LibObs
 %{_libdir}/cmake/LibObs/*.cmake
+/usr/lib/pkgconfig/libobs.pc
 
 #----------------------------------------------------------------------------
 
@@ -164,11 +168,15 @@ Frontend-api library for %{name}.
 #----------------------------------------------------------------------------
 
 %prep
-%autosetup -p1
+%autosetup -n %{name}-%{version} -p1
 
 %build
+
+# Clang build fine only on znver1, on other arch fail. So for znver1 use Clang, for rest GCC (penguin).
+%ifnarch znver1
 export CC=gcc
 export CXX=g++
+%endif
 
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
