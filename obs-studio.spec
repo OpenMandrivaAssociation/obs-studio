@@ -63,7 +63,12 @@ BuildRequires:	swig
 BuildRequires:	mbedtls-devel
 
 #Libva is needed for enable hardware encoding via vaapi. Make it recommends due to lack of libva on some arch (penguin).
-Recommends:	va2
+%ifnarch %{ix86}
+Requires:	lib64va2
+%endif
+%ifarch %{ix86}
+Requires:	libva2
+%endif
 
 # Used via dlopen() so require them, otherwise they don't get installed
 Requires:	%{libobsopengl} = %{EVRD}
