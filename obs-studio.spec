@@ -171,6 +171,7 @@ Frontend-api library for %{name}.
 %autosetup -n %{name}-%{version} -p1
 
 %build
+
 # Clang build fine only on znver1, on other arch fail. So for znver1 use Clang, for rest GCC (penguin).
 %ifnarch znver1
 export CC=gcc
