@@ -13,11 +13,11 @@
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
 Version:	23.0.0
-Release:	0.rc1
+Release:	1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
-Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}-rc1.tar.gz
+Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:		%{name}-22.0.2-linkage.patch
 BuildRequires:	cmake ninja
 BuildRequires:	qmake5
@@ -168,7 +168,7 @@ Frontend-api library for %{name}.
 #----------------------------------------------------------------------------
 
 %prep
-%autosetup -n %{name}-%{version}-rc1 -p1
+%autosetup -n %{name}-%{version} -p1
 
 %build
 # Clang build fine only on znver1, on other arch fail. So for znver1 use Clang, for rest GCC (penguin).
