@@ -12,7 +12,7 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	23.0.2
+Version:	23.1.0
 Release:	1
 License:	GPLv2+
 Group:		Video
@@ -43,13 +43,13 @@ BuildRequires:	pkgconfig(libvlc)
 BuildRequires:	pkgconfig(MagickCore)
 BuildRequires:	pkgconfig(Qt5Core) >= 5.7
 BuildRequires:	pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:	pkgconfig(Qt5Network)
 BuildRequires:	pkgconfig(Qt5Widgets)
 BuildRequires:	pkgconfig(Qt5X11Extras)
 BuildRequires:	pkgconfig(speexdsp)
 BuildRequires:	pkgconfig(udev)
 BuildRequires:	pkgconfig(x11)
-BuildRequires:	pkgconfig(x264)
 BuildRequires:	pkgconfig(xcb)
 BuildRequires:	pkgconfig(xcb-randr)
 BuildRequires:	pkgconfig(xcb-shm)
@@ -62,7 +62,13 @@ BuildRequires:	pkgconfig(lua)
 BuildRequires:	swig
 BuildRequires:	mbedtls-devel
 
-#Libva is needed for enable hardware encoding via vaapi. Make it recommends due to lack of libva on some arch (penguin).
+# Build dependencies from restricted repo. If needed OSB-Studio can be moved to main repo and below deps disabled
+# Build with this deps only for OBS-Studio from restricted repo.
+BuildRequires:	pkgconfig(x264)
+BuildRequires:  pkgconfig(x265)
+BuildRequires:	pkgconfig(fdk-aac)
+
+#Libva is needed for enable hardware encoding via vaapi.(penguin).
 %ifnarch %{ix86}
 Requires:	lib64va2
 %endif
