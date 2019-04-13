@@ -12,7 +12,7 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	23.0.2
+Version:	23.1.0
 Release:	1
 License:	GPLv2+
 Group:		Video
@@ -62,7 +62,7 @@ BuildRequires:	pkgconfig(lua)
 BuildRequires:	swig
 BuildRequires:	mbedtls-devel
 
-#Libva is needed for enable hardware encoding via vaapi. Make it recommends due to lack of libva on some arch (penguin).
+#Libva is needed for enable hardware encoding via vaapi.(penguin).
 %ifnarch %{ix86}
 Requires:	lib64va2
 %endif
