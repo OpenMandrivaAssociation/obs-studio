@@ -43,13 +43,13 @@ BuildRequires:	pkgconfig(libvlc)
 BuildRequires:	pkgconfig(MagickCore)
 BuildRequires:	pkgconfig(Qt5Core) >= 5.7
 BuildRequires:	pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:	pkgconfig(Qt5Network)
 BuildRequires:	pkgconfig(Qt5Widgets)
 BuildRequires:	pkgconfig(Qt5X11Extras)
 BuildRequires:	pkgconfig(speexdsp)
 BuildRequires:	pkgconfig(udev)
 BuildRequires:	pkgconfig(x11)
-BuildRequires:	pkgconfig(x264)
 BuildRequires:	pkgconfig(xcb)
 BuildRequires:	pkgconfig(xcb-randr)
 BuildRequires:	pkgconfig(xcb-shm)
@@ -61,6 +61,12 @@ BuildRequires:	pkgconfig(python3)
 BuildRequires:	pkgconfig(lua)
 BuildRequires:	swig
 BuildRequires:	mbedtls-devel
+
+# Build dependencies from restricted repo. If needed OSB-Studio can be moved to main repo and below deps disabled
+# Build with this deps only for OBS-Studio from restricted repo.
+BuildRequires:	pkgconfig(x264)
+BuildRequires:  pkgconfig(x265)
+BuildRequires:	pkgconfig(fdk-aac)
 
 #Libva is needed for enable hardware encoding via vaapi.(penguin).
 %ifnarch %{ix86}
