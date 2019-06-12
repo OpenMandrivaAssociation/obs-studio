@@ -87,7 +87,9 @@ This package is in the Restricted repository because it requires x264 codec.
 %files
 %doc COPYING README.rst
 %{_bindir}/%{oname}
+%{_bindir}/%{oname}-ffmpeg-mux
 %{_datadir}/applications/com.obsproject.Studio.desktop
+%{_datadir}/metainfo/com.obsproject.Studio.appdata.xml
 %dir %{_datadir}/%{oname}/
 %{_datadir}/%{oname}/*
 %{_iconsdir}/hicolor/*/apps/*
