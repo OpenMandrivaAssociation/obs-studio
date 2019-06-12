@@ -87,10 +87,10 @@ This package is in the Restricted repository because it requires x264 codec.
 %files
 %doc COPYING README.rst
 %{_bindir}/%{oname}
-%{_datadir}/applications/%{oname}.desktop
+%{_datadir}/applications/com.obsproject.Studio.desktop
 %dir %{_datadir}/%{oname}/
 %{_datadir}/%{oname}/*
-%{_iconsdir}/hicolor/*/apps/%{oname}.png
+%{_iconsdir}/hicolor/*/apps/*
 %dir %{_libdir}/%{oname}-plugins/
 %{_libdir}/%{oname}-plugins/*.so
 %{_libdir}/libobs-scripting.so
