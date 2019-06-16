@@ -12,8 +12,8 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	23.1.0
-Release:	2
+Version:	23.2.0
+Release:	1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
@@ -87,10 +87,12 @@ This package is in the Restricted repository because it requires x264 codec.
 %files
 %doc COPYING README.rst
 %{_bindir}/%{oname}
-%{_datadir}/applications/%{oname}.desktop
+%{_bindir}/%{oname}-ffmpeg-mux
+%{_datadir}/applications/com.obsproject.Studio.desktop
+%{_datadir}/metainfo/com.obsproject.Studio.appdata.xml
 %dir %{_datadir}/%{oname}/
 %{_datadir}/%{oname}/*
-%{_iconsdir}/hicolor/*/apps/%{oname}.png
+%{_iconsdir}/hicolor/*/apps/*
 %dir %{_libdir}/%{oname}-plugins/
 %{_libdir}/%{oname}-plugins/*.so
 %{_libdir}/libobs-scripting.so
