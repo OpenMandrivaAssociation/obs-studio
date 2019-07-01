@@ -188,8 +188,8 @@ Frontend-api library for %{name}.
 # Clang7 build fine only on znver1, on other arch fail. So for znver1 use Clang, for rest GCC (penguin).
 # Clang 8 fail on all arch... use gcc for all.
 
-export CC=gcc
-export CXX=g++
+#export CC=gcc
+#export CXX=g++
 
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
