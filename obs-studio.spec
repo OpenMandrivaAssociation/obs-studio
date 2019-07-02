@@ -191,7 +191,7 @@ Frontend-api library for %{name}.
 export CC=gcc
 export CXX=g++
 
-export CXXFLAGS="%{optflags} -fuse-ld=bfd
+export CXXFLAGS="%{optflags} -fuse-ld=bfd"
 
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
