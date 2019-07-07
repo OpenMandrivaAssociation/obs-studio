@@ -191,7 +191,7 @@ Frontend-api library for %{name}.
 export CC=gcc
 export CXX=g++
 
-# On Cooker after switch linken to lld, GCC compiler failed to build. Use another linken for now.
+# On Cooker after switch linker to lld, GCC compiler failed to build. Use another linker for now.
 %global ldflags %{ldflags} -fuse-ld=bfd
 
 %cmake	-DUNIX_STRUCTURE=1 \
