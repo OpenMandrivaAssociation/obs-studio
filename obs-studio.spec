@@ -12,7 +12,7 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	23.2.1
+Version:	24.0.1
 Release:	1
 License:	GPLv2+
 Group:		Video
@@ -163,7 +163,7 @@ Development files for %{name}
 %{_libdir}/libobs-frontend-api.so
 %dir %{_libdir}/cmake/LibObs
 %{_libdir}/cmake/LibObs/*.cmake
-/usr/lib/pkgconfig/libobs.pc
+%{_libdir}/pkgconfig/libobs.pc
 
 #----------------------------------------------------------------------------
 
