@@ -17,7 +17,7 @@ Release:	0.rc6
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
-Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}-0.rc6.tar.gz
+Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}-rc6.tar.gz
 Patch0:		%{name}-22.0.2-linkage.patch
 BuildRequires:	cmake ninja
 BuildRequires:	qmake5
