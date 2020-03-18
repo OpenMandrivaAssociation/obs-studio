@@ -12,7 +12,7 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	24.0.6
+Version:	25.0.0
 Release:	1
 License:	GPLv2+
 Group:		Video
@@ -47,6 +47,7 @@ BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:	pkgconfig(Qt5Network)
 BuildRequires:	pkgconfig(Qt5Widgets)
 BuildRequires:	pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(Qt5Xml)
 BuildRequires:	pkgconfig(speexdsp)
 BuildRequires:	pkgconfig(udev)
 BuildRequires:	pkgconfig(x11)
@@ -188,8 +189,8 @@ Frontend-api library for %{name}.
 # Clang7 build fine only on znver1, on other arch fail. So for znver1 use Clang, for rest GCC (penguin).
 # Clang 8 fail on all arch... use gcc for all.
 
-export CC=gcc
-export CXX=g++
+#export CC=gcc
+#export CXX=g++
 
 # On Cooker after switch linker to lld, GCC compiler failed to build. Use another linker for now.
 %global ldflags %{ldflags} -fuse-ld=bfd
