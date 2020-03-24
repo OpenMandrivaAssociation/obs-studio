@@ -19,6 +19,7 @@ Group:		Video
 Url:		https://obsproject.com
 Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:		%{name}-22.0.2-linkage.patch
+Patch1:		obs-studio-25.0.3-fix-compiler-warnings.patch
 BuildRequires:	cmake ninja
 BuildRequires:	qmake5
 BuildRequires:	freetype-devel
@@ -183,23 +184,13 @@ Frontend-api library for %{name}.
 
 %prep
 %autosetup -n %{name}-%{version} -p1
-
-%build
-
-# Clang7 build fine only on znver1, on other arch fail. So for znver1 use Clang, for rest GCC (penguin).
-# Clang 8 fail on all arch... use gcc for all.
-
-#export CC=gcc
-#export CXX=g++
-
-# On Cooker after switch linker to lld, GCC compiler failed to build. Use another linker for now.
-%global ldflags %{ldflags} -fuse-ld=bfd
-
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
 	-DOBS_VERSION_OVERRIDE="%{version}" \
 	-G Ninja
-%ninja_build
+
+%build
+%ninja_build -C build
 
 
 %install

@@ -1,0 +1,23 @@
+diff -up obs-studio-25.0.3/plugins/linux-v4l2/v4l2-controls.c.omv~ obs-studio-25.0.3/plugins/linux-v4l2/v4l2-controls.c
+--- obs-studio-25.0.3/plugins/linux-v4l2/v4l2-controls.c.omv~	2020-03-24 19:20:06.747017305 +0100
++++ obs-studio-25.0.3/plugins/linux-v4l2/v4l2-controls.c	2020-03-24 19:20:44.317640105 +0100
+@@ -102,7 +102,7 @@ static inline bool add_control_property(
+ 	obs_property_t *prop = NULL;
+ 
+ 	if (!valid_control(qctrl)) {
+-		return;
++		return false;
+ 	}
+ 
+ 	switch (qctrl->type) {
+@@ -131,7 +131,10 @@ static inline bool add_control_property(
+ 		blog(LOG_INFO, "setting default for %s to %d",
+ 		     (char *)qctrl->name, qctrl->default_value);
+ 		break;
++	default:
++		return false;
+ 	}
++	return true;
+ }
+ 
+ int_fast32_t v4l2_update_controls(int_fast32_t dev, obs_properties_t *props,
