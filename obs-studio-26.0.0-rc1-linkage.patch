@@ -1,6 +1,6 @@
-diff -Naur obs-studio-22.0.2.orig/libobs/CMakeLists.txt obs-studio-22.0.2/libobs/CMakeLists.txt
---- obs-studio-22.0.2.orig/libobs/CMakeLists.txt	2018-09-18 16:30:17.994712405 +0300
-+++ obs-studio-22.0.2/libobs/CMakeLists.txt	2018-09-18 16:30:18.005712389 +0300
+diff -uraN obs-studio-26.0.0-rc1/libobs/CMakeLists.txt omv-obs-studio-26.0.0-rc1/libobs/CMakeLists.txt
+--- obs-studio-26.0.0-rc1/libobs/CMakeLists.txt	2020-08-29 03:04:44.000000000 +0200
++++ omv-obs-studio-26.0.0-rc1/libobs/CMakeLists.txt	2020-09-02 15:43:24.026309934 +0200
 @@ -11,6 +11,10 @@
  	list(REMOVE_ITEM FFMPEG_LIBRARIES ${FFMPEG_AVCODEC_LIBRARIES})
  endif()
@@ -11,8 +11,8 @@ diff -Naur obs-studio-22.0.2.orig/libobs/CMakeLists.txt obs-studio-22.0.2/libobs
 +
  if(UNIX)
  	if (NOT APPLE)
- 		find_package(X11_XCB REQUIRED)
-@@ -479,6 +483,10 @@
+ 		find_package(X11 REQUIRED)
+@@ -515,6 +519,10 @@
  		${OBS_JANSSON_IMPORT}
  		${FFMPEG_LIBRARIES}
  		${ZLIB_LIBRARIES}
