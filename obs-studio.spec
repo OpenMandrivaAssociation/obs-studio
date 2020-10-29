@@ -19,6 +19,7 @@ Group:		Video
 Url:		https://obsproject.com
 Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:		%{name}-26.0.0-rc1-linkage.patch
+Patch1:		hevc-vaapi.diff
 BuildRequires:	cmake ninja
 BuildRequires:	qmake5
 BuildRequires:	freetype-devel
