@@ -192,6 +192,5 @@ Frontend-api library for %{name}.
 %build
 %ninja_build -C build
 
-
 %install
 %ninja_install -C build

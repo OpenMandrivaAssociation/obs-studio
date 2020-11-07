@@ -1,30 +1,46 @@
-diff --git a/plugins/obs-ffmpeg/ffmpeg-mux/ffmpeg-mux.c b/plugins/obs-ffmpeg/ffmpeg-mux/ffmpeg-mux.c
-index b9a43e5de..06a04658b 100644
---- a/plugins/obs-ffmpeg/ffmpeg-mux/ffmpeg-mux.c
-+++ b/plugins/obs-ffmpeg/ffmpeg-mux/ffmpeg-mux.c
-@@ -610,17 +610,14 @@ static inline int open_output_file(struct ffmpeg_mux *ffm)
- 	}
+diff -up obs-studio-26.0.2/plugins/obs-ffmpeg/ffmpeg-mux/ffmpeg-mux.c.2~ obs-studio-26.0.2/plugins/obs-ffmpeg/ffmpeg-mux/ffmpeg-mux.c
+diff -up obs-studio-26.0.2/plugins/obs-ffmpeg/obs-ffmpeg.c.2~ obs-studio-26.0.2/plugins/obs-ffmpeg/obs-ffmpeg.c
+--- obs-studio-26.0.2/plugins/obs-ffmpeg/obs-ffmpeg.c.2~	2020-10-06 17:49:58.000000000 +0200
++++ obs-studio-26.0.2/plugins/obs-ffmpeg/obs-ffmpeg.c	2020-11-07 23:45:11.765373302 +0100
+@@ -34,6 +34,7 @@ extern struct obs_encoder_info nvenc_enc
  
- 	ret = avformat_write_header(ffm->output, &dict);
-+	av_dict_free(&dict);
- 	if (ret < 0) {
- 		fprintf(stderr, "Error opening '%s': %s",
- 			ffm->params.printable_file.array, av_err2str(ret));
+ #ifdef LIBAVUTIL_VAAPI_AVAILABLE
+ extern struct obs_encoder_info vaapi_encoder_info;
++extern struct obs_encoder_info vaapi_hevc_encoder_info;
+ #endif
  
--		av_dict_free(&dict);
--
- 		return ret == -22 ? FFM_UNSUPPORTED : FFM_ERROR;
- 	}
+ #ifndef __APPLE__
+@@ -208,9 +209,9 @@ finish:
+ #endif
  
--	av_dict_free(&dict);
--
- 	return FFM_SUCCESS;
+ #ifdef LIBAVUTIL_VAAPI_AVAILABLE
+-static bool vaapi_supported(void)
++static bool vaapi_supported(const char *codec_name)
+ {
+-	AVCodec *vaenc = avcodec_find_encoder_by_name("h264_vaapi");
++	AVCodec *vaenc = avcodec_find_encoder_by_name(codec_name);
+ 	return !!vaenc;
  }
+ #endif
+@@ -250,10 +251,14 @@ bool obs_module_load(void)
+ 		obs_register_encoder(&nvenc_encoder_info);
+ 	}
+ #if !defined(_WIN32) && defined(LIBAVUTIL_VAAPI_AVAILABLE)
+-	if (vaapi_supported()) {
++	if (vaapi_supported("h264_vaapi")) {
+ 		blog(LOG_INFO, "FFMPEG VAAPI supported");
+ 		obs_register_encoder(&vaapi_encoder_info);
+ 	}
++	if (vaapi_supported("hevc_vaapi")) {
++		blog(LOG_INFO, "FFMPEG HEVC VAAPI supported");
++		obs_register_encoder(&vaapi_hevc_encoder_info);
++	}
+ #endif
+ #endif
  
-diff --git a/plugins/obs-ffmpeg/obs-ffmpeg-vaapi.c b/plugins/obs-ffmpeg/obs-ffmpeg-vaapi.c
-index ee5829678..3475efef7 100644
---- a/plugins/obs-ffmpeg/obs-ffmpeg-vaapi.c
-+++ b/plugins/obs-ffmpeg/obs-ffmpeg-vaapi.c
+diff -up obs-studio-26.0.2/plugins/obs-ffmpeg/obs-ffmpeg-vaapi.c.2~ obs-studio-26.0.2/plugins/obs-ffmpeg/obs-ffmpeg-vaapi.c
+--- obs-studio-26.0.2/plugins/obs-ffmpeg/obs-ffmpeg-vaapi.c.2~	2020-10-06 17:49:58.000000000 +0200
++++ obs-studio-26.0.2/plugins/obs-ffmpeg/obs-ffmpeg-vaapi.c	2020-11-07 23:45:11.764373289 +0100
 @@ -69,10 +69,35 @@ struct vaapi_encoder {
  	bool initialized;
  };
@@ -95,7 +111,7 @@ index ee5829678..3475efef7 100644
  }
  
  static bool vaapi_update(void *data, obs_data_t *settings)
-@@ -278,6 +303,7 @@ static bool vaapi_update(void *data, obs_data_t *settings)
+@@ -278,6 +303,7 @@ static bool vaapi_update(void *data, obs
  
  	info("settings:\n"
  	     "\tdevice:       %s\n"
@@ -103,7 +119,7 @@ index ee5829678..3475efef7 100644
  	     "\trate_control: %s\n"
  	     "\tprofile:      %d\n"
  	     "\tlevel:        %d\n"
-@@ -288,9 +314,9 @@ static bool vaapi_update(void *data, obs_data_t *settings)
+@@ -288,9 +314,9 @@ static bool vaapi_update(void *data, obs
  	     "\twidth:        %d\n"
  	     "\theight:       %d\n"
  	     "\tb-frames:     %d\n",
@@ -116,7 +132,7 @@ index ee5829678..3475efef7 100644
  
  	return vaapi_init_codec(enc, device);
  }
-@@ -344,9 +370,12 @@ static void *vaapi_create(obs_data_t *settings, obs_encoder_t *encoder)
+@@ -344,9 +370,12 @@ static void *vaapi_create(obs_data_t *se
  
  	if (vaapi_codec == AV_CODEC_ID_H264) {
  		enc->vaapi = avcodec_find_encoder_by_name("h264_vaapi");
@@ -131,7 +147,7 @@ index ee5829678..3475efef7 100644
  
  	blog(LOG_INFO, "---------------------------------");
  
-@@ -482,7 +511,10 @@ static bool vaapi_encode(void *data, struct encoder_frame *frame,
+@@ -482,7 +511,10 @@ static bool vaapi_encode(void *data, str
  		packet->data = enc->buffer.array;
  		packet->size = enc->buffer.num;
  		packet->type = OBS_ENCODER_VIDEO;
@@ -143,7 +159,7 @@ index ee5829678..3475efef7 100644
  		*received_packet = true;
  	} else {
  		*received_packet = false;
-@@ -503,19 +535,20 @@ static void set_visible(obs_properties_t *ppts, const char *name, bool visible)
+@@ -503,19 +535,20 @@ static void set_visible(obs_properties_t
  	obs_property_set_visible(p, visible);
  }
  
@@ -171,7 +187,7 @@ index ee5829678..3475efef7 100644
  	obs_data_set_default_int(settings, "qp", 20);
  	obs_data_set_default_int(settings, "maxrate", 0);
  }
-@@ -538,9 +571,13 @@ static bool rate_control_modified(obs_properties_t *ppts, obs_property_t *p,
+@@ -538,9 +571,13 @@ static bool rate_control_modified(obs_pr
  	return true;
  }
  
@@ -186,7 +202,7 @@ index ee5829678..3475efef7 100644
  
  	obs_properties_t *props = obs_properties_create();
  	obs_property_t *list;
-@@ -560,41 +597,44 @@ static obs_properties_t *vaapi_properties(void *unused)
+@@ -560,41 +597,44 @@ static obs_properties_t *vaapi_propertie
  		}
  	}
  
@@ -261,7 +277,7 @@ index ee5829678..3475efef7 100644
  
  	obs_property_set_modified_callback(list, rate_control_modified);
  
-@@ -613,6 +653,7 @@ static obs_properties_t *vaapi_properties(void *unused)
+@@ -613,6 +653,7 @@ static obs_properties_t *vaapi_propertie
  			       obs_module_text("KeyframeIntervalSec"), 0, 20,
  			       1);
  
@@ -269,7 +285,7 @@ index ee5829678..3475efef7 100644
  	return props;
  }
  
-@@ -642,11 +683,26 @@ struct obs_encoder_info vaapi_encoder_info = {
+@@ -642,11 +683,26 @@ struct obs_encoder_info vaapi_encoder_in
  	.create = vaapi_create,
  	.destroy = vaapi_destroy,
  	.encode = vaapi_encode,
@@ -298,43 +314,3 @@ index ee5829678..3475efef7 100644
  };
  
  #endif
-diff --git a/plugins/obs-ffmpeg/obs-ffmpeg.c b/plugins/obs-ffmpeg/obs-ffmpeg.c
-index 5a9a3e06b..df9e41ba6 100644
---- a/plugins/obs-ffmpeg/obs-ffmpeg.c
-+++ b/plugins/obs-ffmpeg/obs-ffmpeg.c
-@@ -35,6 +35,7 @@ extern struct obs_encoder_info nvenc_encoder_info;
- 
- #ifdef LIBAVUTIL_VAAPI_AVAILABLE
- extern struct obs_encoder_info vaapi_encoder_info;
-+extern struct obs_encoder_info vaapi_hevc_encoder_info;
- #endif
- 
- #ifndef __APPLE__
-@@ -209,9 +210,9 @@ finish:
- #endif
- 
- #ifdef LIBAVUTIL_VAAPI_AVAILABLE
--static bool vaapi_supported(void)
-+static bool vaapi_supported(const char *codec_name)
- {
--	AVCodec *vaenc = avcodec_find_encoder_by_name("h264_vaapi");
-+	AVCodec *vaenc = avcodec_find_encoder_by_name(codec_name);
- 	return !!vaenc;
- }
- #endif
-@@ -252,10 +253,14 @@ bool obs_module_load(void)
- 		obs_register_encoder(&nvenc_encoder_info);
- 	}
- #if !defined(_WIN32) && defined(LIBAVUTIL_VAAPI_AVAILABLE)
--	if (vaapi_supported()) {
-+	if (vaapi_supported("h264_vaapi")) {
- 		blog(LOG_INFO, "FFMPEG VAAPI supported");
- 		obs_register_encoder(&vaapi_encoder_info);
- 	}
-+	if (vaapi_supported("hevc_vaapi")) {
-+		blog(LOG_INFO, "FFMPEG HEVC VAAPI supported");
-+		obs_register_encoder(&vaapi_hevc_encoder_info);
-+	}
- #endif
- #endif
- 
