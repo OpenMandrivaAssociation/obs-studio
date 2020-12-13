@@ -13,7 +13,7 @@
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
 Version:	26.0.2
-Release:	2
+Release:	3
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
