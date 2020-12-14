@@ -1,18 +1,17 @@
-diff -uraN obs-studio-26.0.0-rc1/libobs/CMakeLists.txt omv-obs-studio-26.0.0-rc1/libobs/CMakeLists.txt
---- obs-studio-26.0.0-rc1/libobs/CMakeLists.txt	2020-08-29 03:04:44.000000000 +0200
-+++ omv-obs-studio-26.0.0-rc1/libobs/CMakeLists.txt	2020-09-02 15:43:24.026309934 +0200
-@@ -11,6 +11,10 @@
+diff -uraN obs-studio-26.1.0/libobs/CMakeLists.txt omv-obs-studio-26.1.0/libobs/CMakeLists.txt
+--- obs-studio-26.1.0/libobs/CMakeLists.txt	2020-12-14 20:53:01.000000000 +0100
++++ omv-obs-studio-26.1.0/libobs/CMakeLists.txt	2020-12-14 21:41:12.281592283 +0100
+@@ -10,6 +10,9 @@
+ if (NOT "${FFMPEG_AVCODEC_LIBRARIES}" STREQUAL "")
  	list(REMOVE_ITEM FFMPEG_LIBRARIES ${FFMPEG_AVCODEC_LIBRARIES})
  endif()
- 
 +find_package(XCB COMPONENTS XCB REQUIRED RANDR REQUIRED XINERAMA REQUIRED)
 +
 +find_package(X11 REQUIRED)
-+
- if(UNIX)
- 	if (NOT APPLE)
- 		find_package(X11 REQUIRED)
-@@ -515,6 +519,10 @@
+ 
+ if(DEBUG_FFMPEG_MUX)
+ 	add_definitions(-DSHOW_SUBPROCESSES)
+@@ -518,6 +521,10 @@
  		${OBS_JANSSON_IMPORT}
  		${FFMPEG_LIBRARIES}
  		${ZLIB_LIBRARIES}
