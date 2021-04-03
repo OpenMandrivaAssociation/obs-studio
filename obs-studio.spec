@@ -1,3 +1,6 @@
+%define _disable_ld_no_undefined 1
+%define _disable_lto 1
+
 %define	major 0
 %define	libobs %mklibname obs %{major}
 %define	libobsglad %mklibname obsglad %{major}
@@ -65,6 +68,7 @@ BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(lua)
 BuildRequires:	swig
 BuildRequires:	mbedtls-devel
+BuildRequires:	sndio-devel
 
 # Build dependencies from restricted repo. If needed OSB-Studio can be moved to main repo and below deps disabled
 # Build with this deps only for OBS-Studio from restricted repo.
