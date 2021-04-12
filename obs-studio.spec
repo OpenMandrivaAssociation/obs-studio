@@ -1,3 +1,6 @@
+%define _disable_ld_no_undefined 1
+%define _disable_lto 1
+
 %define	major 0
 %define	libobs %mklibname obs %{major}
 %define	libobsglad %mklibname obsglad %{major}
@@ -12,12 +15,12 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	26.1.2
-Release:	1
+Version:	27.0.0
+Release:	0.rc1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
-Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}-rc1.tar.gz
 Patch0:		%{name}-26.0.0-rc1-linkage.patch
 Patch1:		hevc-vaapi.diff
 BuildRequires:	cmake ninja
@@ -35,6 +38,7 @@ BuildRequires:	pkgconfig(libavdevice)
 BuildRequires:	pkgconfig(libavformat)
 BuildRequires:	pkgconfig(libavutil)
 BuildRequires:	pkgconfig(libcurl)
+BuildRequires:	pkgconfig(libpipewire-0.3)
 BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(libssl)
 BuildRequires:	pkgconfig(libswresample)
@@ -51,6 +55,7 @@ BuildRequires:	pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(Qt5Xml)
 BuildRequires:	pkgconfig(speexdsp)
 BuildRequires:	pkgconfig(udev)
+BuildRequires:	pkgconfig(wayland-egl)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xcb)
 BuildRequires:	pkgconfig(xcb-randr)
@@ -63,6 +68,7 @@ BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(lua)
 BuildRequires:	swig
 BuildRequires:	mbedtls-devel
+BuildRequires:	sndio-devel
 
 # Build dependencies from restricted repo. If needed OSB-Studio can be moved to main repo and below deps disabled
 # Build with this deps only for OBS-Studio from restricted repo.
@@ -183,7 +189,7 @@ Frontend-api library for %{name}.
 #----------------------------------------------------------------------------
 
 %prep
-%autosetup -n %{name}-%{version} -p1
+%autosetup -n %{name}-%{version}-rc1 -p1
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
 	-DOBS_VERSION_OVERRIDE="%{version}" \
