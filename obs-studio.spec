@@ -193,6 +193,7 @@ Frontend-api library for %{name}.
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
 	-DOBS_VERSION_OVERRIDE="%{version}" \
+	-DBUILD_BROWSER=OFF \
 	-G Ninja
 
 %build
