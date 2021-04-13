@@ -194,6 +194,7 @@ Frontend-api library for %{name}.
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
 	-DOBS_VERSION_OVERRIDE="%{version}" \
 	-DBUILD_BROWSER=OFF \
+	-DBUILD_VST=OFF \
 	-G Ninja
 
 %build
