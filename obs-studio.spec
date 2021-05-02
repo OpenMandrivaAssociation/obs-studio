@@ -189,7 +189,7 @@ Frontend-api library for %{name}.
 #----------------------------------------------------------------------------
 
 %prep
-%autosetup -n %{name}-%{version}-rc2 -p1
+%autosetup -n %{name}-%{version}-rc3 -p1
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
 	-DOBS_VERSION_OVERRIDE="%{version}" \
