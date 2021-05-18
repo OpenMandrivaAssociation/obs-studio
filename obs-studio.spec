@@ -16,11 +16,11 @@
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
 Version:	27.0.0
-Release:	0.rc3
+Release:	0.rc5
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
-Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}-rc3.tar.gz
+Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}-rc5.tar.gz
 Patch0:		%{name}-26.0.0-rc1-linkage.patch
 Patch1:		hevc-vaapi.diff
 BuildRequires:	cmake ninja
@@ -189,7 +189,7 @@ Frontend-api library for %{name}.
 #----------------------------------------------------------------------------
 
 %prep
-%autosetup -n %{name}-%{version}-rc3 -p1
+%autosetup -n %{name}-%{version}-rc5 -p1
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
 	-DOBS_VERSION_OVERRIDE="%{version}" \
