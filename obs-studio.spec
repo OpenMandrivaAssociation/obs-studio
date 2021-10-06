@@ -15,13 +15,13 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	27.0.1
+Version:	27.1.3
 Release:	1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
 Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-Patch0:		%{name}-26.0.0-rc1-linkage.patch
+Patch0:		%{name}-27.1.0-linkage.patch
 Patch1:		hevc-vaapi.diff
 BuildRequires:	cmake ninja
 BuildRequires:	qmake5
@@ -38,6 +38,7 @@ BuildRequires:	pkgconfig(libavdevice)
 BuildRequires:	pkgconfig(libavformat)
 BuildRequires:	pkgconfig(libavutil)
 BuildRequires:	pkgconfig(libcurl)
+BuildRequires:	pkgconfig(libdrm)
 BuildRequires:	pkgconfig(libpipewire-0.3)
 BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(libssl)

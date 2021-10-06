@@ -1,6 +1,6 @@
-diff -uraN obs-studio-26.1.0/libobs/CMakeLists.txt omv-obs-studio-26.1.0/libobs/CMakeLists.txt
---- obs-studio-26.1.0/libobs/CMakeLists.txt	2020-12-14 20:53:01.000000000 +0100
-+++ omv-obs-studio-26.1.0/libobs/CMakeLists.txt	2020-12-14 21:41:12.281592283 +0100
+diff -uraN obs-studio-27.1.0/libobs/CMakeLists.txt omv-obs-studio-27.1.0/libobs/CMakeLists.txt
+--- obs-studio-27.1.0/libobs/CMakeLists.txt	2021-09-27 18:42:01.000000000 +0200
++++ omv-obs-studio-27.1.0/libobs/CMakeLists.txt	2021-09-28 19:29:48.669079439 +0200
 @@ -10,6 +10,9 @@
  if (NOT "${FFMPEG_AVCODEC_LIBRARIES}" STREQUAL "")
  	list(REMOVE_ITEM FFMPEG_LIBRARIES ${FFMPEG_AVCODEC_LIBRARIES})
@@ -11,7 +11,7 @@ diff -uraN obs-studio-26.1.0/libobs/CMakeLists.txt omv-obs-studio-26.1.0/libobs/
  
  if(DEBUG_FFMPEG_MUX)
  	add_definitions(-DSHOW_SUBPROCESSES)
-@@ -518,6 +521,10 @@
+@@ -551,6 +554,10 @@
  		${OBS_JANSSON_IMPORT}
  		${FFMPEG_LIBRARIES}
  		${ZLIB_LIBRARIES}
@@ -19,6 +19,6 @@ diff -uraN obs-studio-26.1.0/libobs/CMakeLists.txt omv-obs-studio-26.1.0/libobs/
 +		${X11_XCB_LIBRARIES}
 +		${X11_LIBRARIES}
 +		-lm -ldl
- 	PUBLIC
- 		${THREADS_LIBRARIES})
+ 		Threads::Threads)
  
+ install_obs_core(libobs EXPORT LibObs)
