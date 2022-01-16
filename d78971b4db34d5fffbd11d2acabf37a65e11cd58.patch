@@ -1,0 +1,38 @@
+From d78971b4db34d5fffbd11d2acabf37a65e11cd58 Mon Sep 17 00:00:00 2001
+From: pkv <pkv@obsproject.com>
+Date: Fri, 17 Dec 2021 20:52:11 +0100
+Subject: [PATCH] obs-ffmpeg: Further FFmpeg deprecations fixes for FFmpeg 4.4+
+
+avcodec.h stopped including channel_layout.h per FFmpeg commit
+1be3d8a0cb77 [1]. Fixes compilation error on macOS against
+FFmpeg later than the mentioned commit.
+[1] https://github.com/FFmpeg/FFmpeg/commit/1be3d8a0cb77f8d34c1f39b47bf5328fe10c82d7
+---
+ plugins/obs-ffmpeg/ffmpeg-mux/ffmpeg-mux.c | 1 +
+ plugins/obs-ffmpeg/obs-ffmpeg-output.c     | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/plugins/obs-ffmpeg/ffmpeg-mux/ffmpeg-mux.c b/plugins/obs-ffmpeg/ffmpeg-mux/ffmpeg-mux.c
+index c07e22abe266..db26cb425ce5 100644
+--- a/plugins/obs-ffmpeg/ffmpeg-mux/ffmpeg-mux.c
++++ b/plugins/obs-ffmpeg/ffmpeg-mux/ffmpeg-mux.c
+@@ -29,6 +29,7 @@
+ #include <util/dstr.h>
+ #include <libavcodec/avcodec.h>
+ #include <libavformat/avformat.h>
++#include <libavutil/channel_layout.h>
+ 
+ #define ANSI_COLOR_RED "\x1b[0;91m"
+ #define ANSI_COLOR_MAGENTA "\x1b[0;95m"
+diff --git a/plugins/obs-ffmpeg/obs-ffmpeg-output.c b/plugins/obs-ffmpeg/obs-ffmpeg-output.c
+index d3637ebbb59b..7d1f12a60393 100644
+--- a/plugins/obs-ffmpeg/obs-ffmpeg-output.c
++++ b/plugins/obs-ffmpeg/obs-ffmpeg-output.c
+@@ -25,6 +25,7 @@
+ #include "obs-ffmpeg-output.h"
+ #include "obs-ffmpeg-formats.h"
+ #include "obs-ffmpeg-compat.h"
++#include <libavutil/channel_layout.h>
+ 
+ struct ffmpeg_output {
+ 	obs_output_t *output;
