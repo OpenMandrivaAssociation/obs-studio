@@ -1,11 +1,11 @@
 %define _disable_ld_no_undefined 1
 %define _disable_lto 1
 
-%define	major 0
-%define	libobs %mklibname obs %{major}
-%define	libobsglad %mklibname obsglad %{major}
-%define	libobsopengl %mklibname obs-opengl %{major}
-%define	libobsfrontendapi  %mklibname obs-frontend-api %{major}
+%define	libobs %mklibname obs
+%define	libobsglad %mklibname obsglad
+%define	libobsopengl %mklibname obs-opengl
+%define	libobsfrontendapi  %mklibname obs-frontend-api
+%define	libobsscripting  %mklibname obs-scripting
 %define	devobs %mklibname obs -d
 
 %define	oname	obs
@@ -15,16 +15,23 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	27.1.3
-Release:	5
+Version:	28.0.1
+Release:	1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
 Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-Patch0:		%{name}-27.1.0-linkage.patch
+# git submodules that have gone missing in 28.0 tarballs
+Source1:	https://github.com/obsproject/obs-browser/archive/b6e0888084ab623f0a73e8cb7ee5dc341e56fda1.tar.gz
+Source2:	https://github.com/obsproject/obs-websocket/archive/5716577019b1ccda01a12db2cba35a023082b7ad.tar.gz
+#Source3:	https://github.com/obsproject/obs-amd-encoder/archive/5a1dafeddb4b37ca2ba2415cf88b40bff8aee428.tar.gz
+
+#Patch0:		%{name}-27.1.0-linkage.patch
 Patch1:		hevc-vaapi.diff
-Patch2:		https://github.com/obsproject/obs-studio/pull/5501.patch
-Patch3:		https://github.com/obsproject/obs-studio/commit/d78971b4db34d5fffbd11d2acabf37a65e11cd58.patch
+# The cmake dependency generator isn't smart enough
+# to see that the w32-pthreads dependency is only
+# in a condition that can never be true on a real OS
+Patch2:		no-w32-pthreads-dep.patch
 BuildRequires:	cmake ninja
 BuildRequires:	qmake5
 BuildRequires:	freetype-devel
@@ -49,13 +56,14 @@ BuildRequires:	pkgconfig(libswscale)
 BuildRequires:	pkgconfig(libv4l2)
 BuildRequires:	pkgconfig(libvlc)
 BuildRequires:	pkgconfig(MagickCore)
-BuildRequires:	pkgconfig(Qt5Core) >= 5.7
-BuildRequires:	pkgconfig(Qt5Gui)
-BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:	pkgconfig(Qt5Network)
-BuildRequires:	pkgconfig(Qt5Widgets)
-BuildRequires:	pkgconfig(Qt5X11Extras)
-BuildRequires:  pkgconfig(Qt5Xml)
+BuildRequires:	cmake(Qt6Core)
+BuildRequires:	cmake(Qt6DBus)
+BuildRequires:	cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Svg)
+BuildRequires:	cmake(Qt6OpenGL)
+BuildRequires:	cmake(Qt6Network)
+BuildRequires:	cmake(Qt6Widgets)
+BuildRequires:  cmake(Qt6Xml)
 BuildRequires:	pkgconfig(speexdsp)
 BuildRequires:	pkgconfig(udev)
 BuildRequires:	pkgconfig(wayland-egl)
@@ -68,7 +76,7 @@ BuildRequires:	pkgconfig(xcb-xinerama)
 BuildRequires:	pkgconfig(xcomposite)
 BuildRequires:	pkgconfig(xfixes)
 BuildRequires:	pkgconfig(python)
-BuildRequires:	pkgconfig(lua)
+BuildRequires:	pkgconfig(luajit)
 BuildRequires:	swig
 BuildRequires:	mbedtls-devel
 BuildRequires:	sndio-devel
@@ -120,7 +128,7 @@ Shared library for %{name}.
 
 %files -n %{libobs}
 %doc COPYING README.rst
-%{_libdir}/libobs.so.%{major}*
+%{_libdir}/libobs.so.*
 
 #----------------------------------------------------------------------------
 
@@ -133,7 +141,7 @@ Shared library for %{name}.
 
 %files -n %{libobsglad}
 %doc COPYING README.rst
-%{_libdir}/libobsglad.so.%{major}*
+%{_libdir}/libobsglad.so.*
 
 #----------------------------------------------------------------------------
 
@@ -147,7 +155,7 @@ Shared library for %{name}.
 
 %files -n %{libobsopengl}
 %doc COPYING README.rst
-%{_libdir}/libobs-opengl.so.%{major}*
+%{_libdir}/libobs-opengl.so.*
 
 #----------------------------------------------------------------------------
 
@@ -172,8 +180,8 @@ Development files for %{name}
 %{_libdir}/libobsglad.so
 %{_libdir}/libobs-opengl.so
 %{_libdir}/libobs-frontend-api.so
-%dir %{_libdir}/cmake/LibObs
-%{_libdir}/cmake/LibObs/*.cmake
+%{_libdir}/cmake/libobs
+%{_libdir}/cmake/obs-frontend-api
 %{_libdir}/pkgconfig/libobs.pc
 
 #----------------------------------------------------------------------------
@@ -187,17 +195,41 @@ Frontend-api library for %{name}.
 
 %files -n %{libobsfrontendapi}
 %doc COPYING README.rst
-%{_libdir}/libobs-frontend-api.so.%{major}*
+%{_libdir}/libobs-frontend-api.so.*
+
+#----------------------------------------------------------------------------
+
+%package -n %{libobsscripting}
+Summary:	Scripting library for %{name}	
+Group:		System/Libraries
+
+%description -n %{libobsscripting}
+Scripting library for %{name}.
+
+%files -n %{libobsscripting}
+%{_libdir}/libobs-scripting.so.*
 
 #----------------------------------------------------------------------------
 
 %prep
 %autosetup -n %{name}-%{version} -p1
+
+cd plugins
+rmdir obs-browser obs-websocket enc-amf
+tar xf %{S:1}
+tar xf %{S:2}
+mv obs-browser-* obs-browser
+mv obs-websocket-* obs-websocket
+cd ..
+
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
 	-DOBS_VERSION_OVERRIDE="%{version}" \
 	-DBUILD_BROWSER=OFF \
+	-DENABLE_WEBSOCKET=OFF \
 	-DBUILD_VST=OFF \
+	-DENABLE_NEW_MPEGTS_OUTPUT=OFF \
+	-DENABLE_AJA=OFF \
 	-G Ninja
 
 %build

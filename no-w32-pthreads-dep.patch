@@ -1,0 +1,13 @@
+diff -up obs-studio-28.0.1/libobs/cmake/libobsConfig.cmake.in.omv~ obs-studio-28.0.1/libobs/cmake/libobsConfig.cmake.in
+--- obs-studio-28.0.1/libobs/cmake/libobsConfig.cmake.in.omv~	2022-09-04 16:15:36.819032842 +0200
++++ obs-studio-28.0.1/libobs/cmake/libobsConfig.cmake.in	2022-09-04 16:15:42.042975778 +0200
+@@ -2,9 +2,6 @@
+ 
+ include(CMakeFindDependencyMacro)
+ 
+-if(MSVC)
+-  find_dependency(w32-pthreads REQUIRED)
+-endif()
+ find_dependency(Threads REQUIRED)
+ 
+ include("${CMAKE_CURRENT_LIST_DIR}/@TARGETS_EXPORT_NAME@.cmake")
