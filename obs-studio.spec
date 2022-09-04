@@ -57,6 +57,7 @@ BuildRequires:	pkgconfig(libv4l2)
 BuildRequires:	pkgconfig(libvlc)
 BuildRequires:	pkgconfig(MagickCore)
 BuildRequires:	pkgconfig(xkbcommon)
+BuildRequires:	pkgconfig(libpci)
 BuildRequires:	qt6-cmake
 BuildRequires:	cmake(Qt6)
 BuildRequires:	cmake(Qt6Core)
