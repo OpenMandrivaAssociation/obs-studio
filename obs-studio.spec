@@ -59,6 +59,7 @@ BuildRequires:	pkgconfig(MagickCore)
 BuildRequires:	pkgconfig(xkbcommon)
 BuildRequires:	pkgconfig(libpci)
 BuildRequires:	pkgconfig(libssh2)
+BuildRequires:	pkgconfig(libidn2)
 BuildRequires:	qt6-cmake
 BuildRequires:	cmake(Qt6)
 BuildRequires:	cmake(Qt6Core)
