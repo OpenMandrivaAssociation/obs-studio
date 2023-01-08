@@ -48,6 +48,7 @@ BuildRequires:	pkgconfig(libavformat)
 BuildRequires:	pkgconfig(libavutil)
 BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	pkgconfig(libdrm)
+BuildRequires:	pkgconfig(fdk-aac)
 BuildRequires:	pkgconfig(libpipewire-0.3)
 BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(libssl)
@@ -71,6 +72,7 @@ BuildRequires:	cmake(Qt6OpenGL)
 BuildRequires:	cmake(Qt6Network)
 BuildRequires:	cmake(Qt6Widgets)
 BuildRequires:  cmake(Qt6Xml)
+BuildRequires:	cmake(vulkanheaders)
 BuildRequires:	pkgconfig(speexdsp)
 BuildRequires:	pkgconfig(udev)
 BuildRequires:	pkgconfig(wayland-egl)
@@ -232,6 +234,8 @@ cd ..
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
 	-DOBS_VERSION_OVERRIDE="%{version}" \
+	-DENABLE_LIBFDK=ON \
+  	-DENABLE_JACK=ON \
 	-DBUILD_BROWSER=OFF \
 	-DENABLE_WEBSOCKET=OFF \
 	-DBUILD_VST=OFF \
