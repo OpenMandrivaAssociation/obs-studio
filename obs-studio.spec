@@ -244,6 +244,8 @@ cd ..
 	-G Ninja
 
 %build
+export CC=gcc
+export CXX=g++
 %ninja_build -C build
 
 %install
