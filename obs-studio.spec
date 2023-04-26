@@ -15,15 +15,15 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	29.0.2
-Release:	2
+Version:	29.1.0
+Release:	0.rc1.0
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
-Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}-rc1.tar.gz
 # git submodules that have gone missing in 28.0 tarballs
-Source1:	https://github.com/obsproject/obs-browser/archive/b6e0888084ab623f0a73e8cb7ee5dc341e56fda1.tar.gz
-Source2:	https://github.com/obsproject/obs-websocket/archive/5716577019b1ccda01a12db2cba35a023082b7ad.tar.gz
+Source1:	https://github.com/obsproject/obs-browser/archive/49fb735db97cbd890274cbb71da950732e280fb7.tar.gz
+Source2:	https://github.com/obsproject/obs-websocket/archive/6ef055a369249f6d7b008914fe2bc360c96f23dc.tar.gz
 #Source3:	https://github.com/obsproject/obs-amd-encoder/archive/5a1dafeddb4b37ca2ba2415cf88b40bff8aee428.tar.gz
 
 #Patch0:		%{name}-27.1.0-linkage.patch
@@ -221,7 +221,7 @@ Scripting library for %{name}.
 #----------------------------------------------------------------------------
 
 %prep
-%autosetup -n %{name}-%{version} -p1
+%autosetup -n %{name}-%{version}-rc1 -p1
 
 cd plugins
 rmdir obs-browser obs-websocket enc-amf
