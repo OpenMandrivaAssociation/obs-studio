@@ -22,7 +22,7 @@ Group:		Video
 Url:		https://obsproject.com
 Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 # git submodules that have gone missing in 28.0 tarballs
-Source1:	https://github.com/obsproject/obs-websocket/archive/594115a27d40f0916e55db97cb61f7c7130cbe28.tar.gz
+Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-594115a27d40f0916e55db97cb61f7c7130cbe28.tar.gz
 Source2:	https://github.com/obsproject/obs-websocket/archive/6ef055a369249f6d7b008914fe2bc360c96f23dc.tar.gz
 #Source3:	https://github.com/obsproject/obs-amd-encoder/archive/5a1dafeddb4b37ca2ba2415cf88b40bff8aee428.tar.gz
 
