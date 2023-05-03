@@ -2,8 +2,6 @@
 %define _disable_lto 1
 
 %define	libobs %mklibname obs
-%define	libobsglad %mklibname obsglad
-%define	libobsopengl %mklibname obs-opengl
 %define	libobsfrontendapi  %mklibname obs-frontend-api
 %define	libobsscripting  %mklibname obs-scripting
 %define	devobs %mklibname obs -d
@@ -27,7 +25,7 @@ Source2:	https://github.com/obsproject/obs-websocket/archive/6ef055a369249f6d7b0
 #Source3:	https://github.com/obsproject/obs-amd-encoder/archive/5a1dafeddb4b37ca2ba2415cf88b40bff8aee428.tar.gz
 
 #Patch0:		%{name}-27.1.0-linkage.patch
-Patch1:		hevc-vaapi.diff
+Patch1:		obs-studio-29.1.0-clang16.patch
 # The cmake dependency generator isn't smart enough
 # to see that the w32-pthreads dependency is only
 # in a condition that can never be true on a real OS
@@ -105,15 +103,19 @@ Requires:	libva2
 %endif
 
 # Used via dlopen() so require them, otherwise they don't get installed
-Requires:	%{libobsopengl} = %{EVRD}
 Requires:	%{libobs} = %{EVRD}
+
+# Libraries that existed in previous versions
+%define	libobsglad %mklibname obsglad
+%define	libobsopengl %mklibname obs-opengl
+Obsoletes:	%{libobsglad} < %{EVRD}
+Obsoletes:	%{libobsopengl} < %{EVRD}
 
 %description
 Free and open source software for video recording and live streaming.
 This package is in the Restricted repository because it requires x264 codec.
 
 %files
-%doc COPYING README.rst
 %{_bindir}/%{oname}
 %{_bindir}/%{oname}-ffmpeg-mux
 %{_datadir}/applications/com.obsproject.Studio.desktop
@@ -125,6 +127,7 @@ This package is in the Restricted repository because it requires x264 codec.
 %{_libdir}/%{oname}-plugins/*.so
 %{_libdir}/libobs-scripting.so
 %{_libdir}/obs-scripting
+%{_libdir}/libobs-opengl.so*
 
 #----------------------------------------------------------------------------
 
@@ -136,35 +139,7 @@ Group:		System/Libraries
 Shared library for %{name}.
 
 %files -n %{libobs}
-%doc COPYING README.rst
 %{_libdir}/libobs.so.*
-
-#----------------------------------------------------------------------------
-
-%package -n %{libobsglad}
-Summary:	Shared library for %{name}
-Group:		System/Libraries
-
-%description -n %{libobsglad}
-Shared library for %{name}.
-
-%files -n %{libobsglad}
-%doc COPYING README.rst
-%{_libdir}/libobsglad.so.*
-
-#----------------------------------------------------------------------------
-
-%package -n %{libobsopengl}
-Summary:	Shared library for %{name}
-Group:		System/Libraries
-Requires:	%{libobsfrontendapi} = %{EVRD}
-
-%description -n %{libobsopengl}
-Shared library for %{name}.
-
-%files -n %{libobsopengl}
-%doc COPYING README.rst
-%{_libdir}/libobs-opengl.so.*
 
 #----------------------------------------------------------------------------
 
@@ -172,8 +147,6 @@ Shared library for %{name}.
 Summary:	Development files for %{name}
 Group:		Development/C
 Requires:	%{libobs} = %{EVRD}
-Requires:	%{libobsglad} = %{EVRD}
-Requires:	%{libobsopengl} = %{EVRD}
 Requires:	%{libobsfrontendapi} = %{EVRD}
 Provides:	%{name}-devel = %{EVRD}
 Provides:	%{oname}-devel = %{EVRD}
@@ -182,12 +155,9 @@ Provides:	%{oname}-devel = %{EVRD}
 Development files for %{name}
 
 %files -n %{devobs}
-%doc COPYING README.rst
 %dir %{_includedir}/%{oname}
 %{_includedir}/%{oname}/*
 %{_libdir}/libobs.so
-%{_libdir}/libobsglad.so
-%{_libdir}/libobs-opengl.so
 %{_libdir}/libobs-frontend-api.so
 %{_libdir}/cmake/libobs
 %{_libdir}/cmake/obs-frontend-api
@@ -203,7 +173,6 @@ Group:		System/Libraries
 Frontend-api library for %{name}.
 
 %files -n %{libobsfrontendapi}
-%doc COPYING README.rst
 %{_libdir}/libobs-frontend-api.so.*
 
 #----------------------------------------------------------------------------

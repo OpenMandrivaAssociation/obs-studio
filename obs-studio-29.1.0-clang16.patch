@@ -1,0 +1,86 @@
+diff -up obs-studio-29.1.0/deps/file-updater/file-updater/file-updater.c.omv~ obs-studio-29.1.0/deps/file-updater/file-updater/file-updater.c
+--- obs-studio-29.1.0/deps/file-updater/file-updater/file-updater.c.omv~	2023-05-03 20:08:05.674575020 +0200
++++ obs-studio-29.1.0/deps/file-updater/file-updater/file-updater.c	2023-05-03 20:15:09.536857184 +0200
+@@ -108,6 +108,10 @@ static bool do_http_request(struct updat
+ 	CURLcode code;
+ 	uint8_t null_terminator = 0;
+ 
++// pragmas are a workaround for what seems to be a false positive w/ warnings
++// "file-updater.c:115:2: error: call to '_curl_easy_setopt_err_write_callback' declared with 'warning' attribute: curl_easy_setopt expects a curl_write_callback argument for this option"
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wattribute-warning"
+ 	da_resize(info->file_data, 0);
+ 	curl_easy_setopt(info->curl, CURLOPT_URL, url);
+ 	curl_easy_setopt(info->curl, CURLOPT_HTTPHEADER, info->header);
+@@ -125,6 +129,7 @@ static bool do_http_request(struct updat
+ 				 http_header);
+ 		curl_easy_setopt(info->curl, CURLOPT_HEADERDATA, info);
+ 	}
++#pragma GCC diagnostic pop
+ 
+ 	code = curl_easy_perform(info->curl);
+ 	if (code != CURLE_OK) {
+diff -up obs-studio-29.1.0/deps/json11/json11.cpp.omv~ obs-studio-29.1.0/deps/json11/json11.cpp
+--- obs-studio-29.1.0/deps/json11/json11.cpp.omv~	2023-05-03 20:15:37.856361073 +0200
++++ obs-studio-29.1.0/deps/json11/json11.cpp	2023-05-03 20:16:26.028231637 +0200
+@@ -151,7 +151,7 @@ protected:
+ 
+     // Constructors
+     explicit Value(const T &value) : m_value(value) {}
+-    explicit Value(T &&value)      : m_value(move(value)) {}
++    explicit Value(T &&value)      : m_value(std::move(value)) {}
+ 
+     // Get type tag
+     Json::Type type() const override {
+@@ -198,7 +198,7 @@ class JsonString final : public Value<Js
+     const string &string_value() const override { return m_value; }
+ public:
+     explicit JsonString(const string &value) : Value(value) {}
+-    explicit JsonString(string &&value)      : Value(move(value)) {}
++    explicit JsonString(string &&value)      : Value(std::move(value)) {}
+ };
+ 
+ class JsonArray final : public Value<Json::ARRAY, Json::array> {
+@@ -206,7 +206,7 @@ class JsonArray final : public Value<Jso
+     const Json & operator[](size_t i) const override;
+ public:
+     explicit JsonArray(const Json::array &value) : Value(value) {}
+-    explicit JsonArray(Json::array &&value)      : Value(move(value)) {}
++    explicit JsonArray(Json::array &&value)      : Value(std::move(value)) {}
+ };
+ 
+ class JsonObject final : public Value<Json::OBJECT, Json::object> {
+@@ -214,7 +214,7 @@ class JsonObject final : public Value<Js
+     const Json & operator[](const string &key) const override;
+ public:
+     explicit JsonObject(const Json::object &value) : Value(value) {}
+-    explicit JsonObject(Json::object &&value)      : Value(move(value)) {}
++    explicit JsonObject(Json::object &&value)      : Value(std::move(value)) {}
+ };
+ 
+ class JsonNull final : public Value<Json::NUL, NullStruct> {
+@@ -256,12 +256,12 @@ Json::Json(double value)               :
+ Json::Json(int value)                  : m_ptr(make_shared<JsonInt>(value)) {}
+ Json::Json(bool value)                 : m_ptr(value ? statics().t : statics().f) {}
+ Json::Json(const string &value)        : m_ptr(make_shared<JsonString>(value)) {}
+-Json::Json(string &&value)             : m_ptr(make_shared<JsonString>(move(value))) {}
++Json::Json(string &&value)             : m_ptr(make_shared<JsonString>(std::move(value))) {}
+ Json::Json(const char * value)         : m_ptr(make_shared<JsonString>(value)) {}
+ Json::Json(const Json::array &values)  : m_ptr(make_shared<JsonArray>(values)) {}
+-Json::Json(Json::array &&values)       : m_ptr(make_shared<JsonArray>(move(values))) {}
++Json::Json(Json::array &&values)       : m_ptr(make_shared<JsonArray>(std::move(values))) {}
+ Json::Json(const Json::object &values) : m_ptr(make_shared<JsonObject>(values)) {}
+-Json::Json(Json::object &&values)      : m_ptr(make_shared<JsonObject>(move(values))) {}
++Json::Json(Json::object &&values)      : m_ptr(make_shared<JsonObject>(std::move(values))) {}
+ 
+ /* * * * * * * * * * * * * * * * * * * *
+  * Accessors
+@@ -359,7 +359,7 @@ struct JsonParser final {
+      * Mark this parse as failed.
+      */
+     Json fail(string &&msg) {
+-        return fail(move(msg), Json());
++        return fail(std::move(msg), Json());
+     }
+ 
+     template <typename T>
