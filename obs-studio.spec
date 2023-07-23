@@ -14,7 +14,7 @@
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
 Version:	29.1.3
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
@@ -31,7 +31,6 @@ Patch1:		obs-studio-29.1.0-clang16.patch
 # in a condition that can never be true on a real OS
 Patch2:		no-w32-pthreads-dep.patch
 BuildRequires:	cmake ninja
-BuildRequires:	qmake5
 BuildRequires:	freetype-devel
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	pkgconfig(cryptopp)
@@ -61,6 +60,7 @@ BuildRequires:	pkgconfig(libpci)
 BuildRequires:	pkgconfig(libssh2)
 BuildRequires:	pkgconfig(libidn2)
 BuildRequires:	qt6-cmake
+BuildRequires:	qmake-qt6
 BuildRequires:	cmake(Qt6)
 BuildRequires:	cmake(Qt6Core)
 BuildRequires:	cmake(Qt6DBus)
