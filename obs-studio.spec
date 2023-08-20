@@ -193,7 +193,7 @@ Scripting library for %{name}.
 %autosetup -n %{name}-%{version}-beta2 -p1
 
 cd plugins
-rmdir obs-browser obs-websocket enc-amf
+rmdir obs-browser obs-websocket
 tar xf %{S:1}
 tar xf %{S:2}
 mv obs-browser-* obs-browser
