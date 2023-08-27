@@ -14,7 +14,7 @@
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
 Version:	29.1.3
-Release:	2
+Release:	3
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
@@ -101,6 +101,9 @@ Requires:	lib64va2
 %ifarch %{ix86}
 Requires:	libva2
 %endif
+Requires: x264
+Requires: x265
+Requires: %{_lib}Qt6WlShellIntegration
 
 # Used via dlopen() so require them, otherwise they don't get installed
 Requires:	%{libobs} = %{EVRD}
