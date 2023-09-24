@@ -18,7 +18,7 @@ Release:	0.beta3.0
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
-Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}-beta2.tar.gz
+Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}-beta3.tar.gz
 # git submodules that have gone missing in 28.0 tarballs
 Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-bbe8c74b1516fa610a8108212e48f8406cd9da40.tar.gz
 Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-ec2cdc84759d737e8612fdd0b3c3fcec6ac89761.tar.gz
@@ -191,7 +191,7 @@ Scripting library for %{name}.
 #----------------------------------------------------------------------------
 
 %prep
-%autosetup -n %{name}-%{version}-beta2 -p1
+%autosetup -n %{name}-%{version}-beta3 -p1
 
 cd plugins
 rmdir obs-browser obs-websocket
