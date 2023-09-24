@@ -71,7 +71,7 @@ BuildRequires:	cmake(Qt6Network)
 BuildRequires:	cmake(Qt6Widgets)
 BuildRequires:  cmake(Qt6Xml)
 BuildRequires:	cmake(vulkanheaders)
-%ifnarch arm armx
+%ifnarch aarch64
 BuildRequires:	pkgconfig(vpl)
 %endif
 BuildRequires:	pkgconfig(speexdsp)
