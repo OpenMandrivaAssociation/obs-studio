@@ -102,6 +102,9 @@ Requires:	lib64va2
 %ifarch %{ix86}
 Requires:	libva2
 %endif
+Requires: x264
+Requires: x265
+Requires: %{_lib}Qt6WlShellIntegration
 
 # Used via dlopen() so require them, otherwise they don't get installed
 Requires:	%{libobs} = %{EVRD}
