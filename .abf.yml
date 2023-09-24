@@ -1,4 +1,4 @@
 sources:
-  obs-browser-594115a27d40f0916e55db97cb61f7c7130cbe28.tar.gz: ebc6d53a948f8e18d7d293ca3ad018bf14020346
-  obs-websocket-6fd18a7ef1ecb149e8444154af1daab61d4241a9.tar.gz: 8929907ff0af469db155651e3cd61aff890eada8
-  obs-studio-29.1.3.tar.gz: 90b3adf3ccf4343c9ed0b84a3e6c0f8613c15299
+  obs-browser-bbe8c74b1516fa610a8108212e48f8406cd9da40.tar.gz: 2654482465bf5bf063e8d1d817dfac8982eb8796
+  obs-websocket-ec2cdc84759d737e8612fdd0b3c3fcec6ac89761.tar.gz: cd4c1d65eacf3d297aefa4acc0e6d2a6f969aa90
+  obs-studio-30.0.0-beta3.tar.gz: 6b87dad77b9427cae1f7bdfdedeb728393806156
