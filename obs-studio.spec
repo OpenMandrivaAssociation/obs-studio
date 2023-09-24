@@ -218,7 +218,7 @@ cd ..
 	-DENABLE_AJA=OFF \
  	-DENABLE_WEBRTC=OFF \
 %ifnarch aarch64
-	-DENABLE_QSV11=OFF \
+	-DENABLE_QSV11=False \
 %endif
 	-G Ninja
 
