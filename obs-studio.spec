@@ -14,14 +14,14 @@
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
 Version:	30.0.0
-Release:	0.beta3.0
+Release:	0.rc1.0
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
-Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}-beta3.tar.gz
+Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}-rc1.tar.gz
 # git submodules that have gone missing in 28.0 tarballs
-Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-bbe8c74b1516fa610a8108212e48f8406cd9da40.tar.gz
-Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-ec2cdc84759d737e8612fdd0b3c3fcec6ac89761.tar.gz
+Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-eeccba69da7c427983ff2de68da187e799777e1f.tar.gz
+Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-e9c0eee9e4c48337c59af0f3e871f3801a9c35f0.tar.gz
 #Source3:	https://github.com/obsproject/obs-amd-encoder/archive/5a1dafeddb4b37ca2ba2415cf88b40bff8aee428.tar.gz
 
 #Patch0:		%{name}-27.1.0-linkage.patch
@@ -196,7 +196,7 @@ Scripting library for %{name}.
 #----------------------------------------------------------------------------
 
 %prep
-%autosetup -n %{name}-%{version}-beta3 -p1
+%autosetup -n %{name}-%{version}-rc1 -p1
 
 cd plugins
 rmdir obs-browser obs-websocket
