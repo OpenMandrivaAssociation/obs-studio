@@ -8,6 +8,9 @@
 
 %define	oname	obs
 
+# ffmpeg 6.1 deprecates a slew of things still used by obs
+%global optflags %{optflags} -Wno-error=deprecated-declarations
+
 # This package requires x264 codec so we provide it in Restricted repository
 %define	distsuffix plf
 
