@@ -93,6 +93,7 @@ BuildRequires:	pkgconfig(luajit)
 BuildRequires:	swig
 BuildRequires:	mbedtls-devel
 BuildRequires:	sndio-devel
+BuildRequires:  cef-devel
 
 # Build dependencies from restricted repo. If needed OSB-Studio can be moved to main repo and below deps disabled
 # Build with this deps only for OBS-Studio from restricted repo.
