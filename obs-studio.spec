@@ -221,6 +221,7 @@ cd ..
 	-DENABLE_NEW_MPEGTS_OUTPUT=OFF \
 	-DENABLE_AJA=OFF \
  	-DENABLE_WEBRTC=OFF \
+        -DCEF_ROOT_DIR=/usr/lib64/cef/ \
 %ifarch aarch64
 	-DENABLE_QSV11=False \
 %endif
