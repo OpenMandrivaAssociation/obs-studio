@@ -17,7 +17,7 @@
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
 Version:	30.0.2
-Release:	2
+Release:	3
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
@@ -214,8 +214,8 @@ cd ..
 	-DOBS_VERSION_OVERRIDE="%{version}" \
 	-DENABLE_LIBFDK=ON \
   	-DENABLE_JACK=ON \
-	-DBUILD_BROWSER=OFF \
-	-DENABLE_WEBSOCKET=OFF \
+	-DBUILD_BROWSER=ON \
+	-DENABLE_WEBSOCKET=OnlN \
 	-DBUILD_VST=OFF \
 	-DENABLE_NEW_MPEGTS_OUTPUT=OFF \
 	-DENABLE_AJA=OFF \
