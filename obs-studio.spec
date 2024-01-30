@@ -17,7 +17,7 @@
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
 Version:	30.0.2
-Release:	2
+Release:	3
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
@@ -33,6 +33,7 @@ Patch1:		obs-studio-29.1.0-clang16.patch
 # to see that the w32-pthreads dependency is only
 # in a condition that can never be true on a real OS
 Patch2:		no-w32-pthreads-dep.patch
+Patch3:		amf.patch
 BuildRequires:	cmake ninja
 BuildRequires:	freetype-devel
 BuildRequires:	pkgconfig(alsa)
