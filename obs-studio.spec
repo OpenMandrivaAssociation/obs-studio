@@ -35,6 +35,7 @@ Patch1:		obs-studio-29.1.0-clang16.patch
 Patch2:		no-w32-pthreads-dep.patch
 Patch3:		amf.patch
 BuildRequires:	cmake ninja
+BuildRequires:	amf-devel
 BuildRequires:	freetype-devel
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	pkgconfig(cryptopp)
