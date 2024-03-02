@@ -74,6 +74,7 @@ BuildRequires:	cmake(Qt6Network)
 BuildRequires:	cmake(Qt6Widgets)
 BuildRequires:  cmake(Qt6Xml)
 BuildRequires:	cmake(vulkanheaders)
+BuildRequires:	qt6-qtbase-theme-gtk3
 %ifnarch aarch64
 BuildRequires:	pkgconfig(vpl)
 %endif
