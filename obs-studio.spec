@@ -14,14 +14,16 @@
 # This package requires x264 codec so we provide it in Restricted repository
 %define	distsuffix plf
 
+#define beta rc1
+
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
 Version:	30.1.0
-Release:	0.rc1.0
+Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
-Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}-rc1.tar.gz
+Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}%{?beta:-%{beta}}.tar.gz
 # git submodules that have gone missing in 28.0 tarballs
 Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-9c235def6edaf6570ce854f9aeb46a9d40d2c4e9.tar.gz
 Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-d5077fca03a47144f7c0eb81b5d3278186e31d59.tar.gz
@@ -74,8 +76,7 @@ BuildRequires:	cmake(Qt6Network)
 BuildRequires:	cmake(Qt6Widgets)
 BuildRequires:  cmake(Qt6Xml)
 BuildRequires:	cmake(vulkanheaders)
-BuildRequires:	qt6-qtbase-theme-gtk3
-%ifnarch aarch64
+%ifarch %{x86_64}
 BuildRequires:	pkgconfig(vpl)
 %endif
 BuildRequires:	pkgconfig(speexdsp)
@@ -200,7 +201,7 @@ Scripting library for %{name}.
 #----------------------------------------------------------------------------
 
 %prep
-%autosetup -n %{name}-%{version}-rc1 -p1
+%autosetup -n %{name}-%{version}%{?beta:-%{beta}} -p1
 
 cd plugins
 rmdir obs-browser obs-websocket
@@ -221,8 +222,8 @@ cd ..
 	-DENABLE_NEW_MPEGTS_OUTPUT=OFF \
 	-DENABLE_AJA=OFF \
  	-DENABLE_WEBRTC=OFF \
-%ifarch aarch64
-	-DENABLE_QSV11=False \
+%ifnarch %{x86_64}
+	-DENABLE_QSV11=OFF \
 %endif
 	-G Ninja
 
