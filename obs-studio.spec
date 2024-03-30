@@ -130,7 +130,7 @@ This package is in the Restricted repository because it requires x264 codec.
 %{_bindir}/%{oname}
 %{_bindir}/%{oname}-ffmpeg-mux
 %{_datadir}/applications/com.obsproject.Studio.desktop
-#{_datadir}/metainfo/com.obsproject.Studio.appdata.xml
+%{_datadir}/metainfo/com.obsproject.Studio.metainfo.xml
 %dir %{_datadir}/%{oname}/
 %{_datadir}/%{oname}/*
 %{_iconsdir}/hicolor/*/apps/*
