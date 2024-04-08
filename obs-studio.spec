@@ -1,7 +1,9 @@
 %define _disable_ld_no_undefined 1
 %define _disable_lto 1
 
-%bcond_without cef
+# Current status of CEF plugin: It compiles, but crashes when trying
+# to use the browser
+%bcond_with cef
 
 %define	libobs %mklibname obs
 %define	libobsfrontendapi  %mklibname obs-frontend-api
@@ -20,8 +22,8 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	30.1.1
-Release:	%{?beta:0.%{beta}.}2
+Version:	30.1.2
+Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
@@ -39,6 +41,7 @@ Patch1:		obs-studio-29.1.0-clang16.patch
 Patch2:		no-w32-pthreads-dep.patch
 # Port the browser plugin to CEF 122.x
 Patch3:		obs-studio-cef-122.patch
+Patch4:		obs-studio-ffmpeg-7.0.patch
 BuildRequires:	cmake ninja
 BuildRequires:	freetype-devel
 BuildRequires:	pkgconfig(alsa)
@@ -68,6 +71,7 @@ BuildRequires:	pkgconfig(xkbcommon)
 BuildRequires:	pkgconfig(libpci)
 BuildRequires:	pkgconfig(libssh2)
 BuildRequires:	pkgconfig(libidn2)
+BuildRequires:	pkgconfig(libvlc)
 BuildRequires:	qt6-cmake
 BuildRequires:	qmake-qt6
 BuildRequires:	cmake(Qt6)
@@ -142,11 +146,70 @@ This package is in the Restricted repository because it requires x264 codec.
 %{_datadir}/%{oname}/*
 %{_iconsdir}/hicolor/*/apps/*
 %dir %{_libdir}/%{oname}-plugins/
-%{_libdir}/%{oname}-plugins/*.so
-%{_libdir}/libobs-scripting.so
+%{_libdir}/%{oname}-plugins/frontend-tools.so
+%{_libdir}/%{oname}-plugins/image-source.so
+%{_libdir}/%{oname}-plugins/linux-*.so
+%{_libdir}/%{oname}-plugins/obs-*.so
+%exclude %{_libdir}/%{oname}-plugins/obs-browser.so
+%{_libdir}/%{oname}-plugins/rtmp-services.so
+%{_libdir}/%{oname}-plugins/text-freetype2.so
 %{_libdir}/obs-scripting
 %{_libdir}/libobs-opengl.so*
 
+#----------------------------------------------------------------------------
+
+%package plugin-vlc
+Summary:	VLC player support plugin for OBS Studio
+Group:		Video
+Requires:	%{name} = %{EVRD}
+
+%description plugin-vlc
+VLC player support plugin for OBS Studio
+
+%files plugin-vlc
+%{_libdir}/%{oname}-plugins/vlc-video.so
+
+#----------------------------------------------------------------------------
+
+%package plugin-decklink
+Summary:	DeckLink hardware support plugin for OBS Studio
+Group:		Video
+Requires:	%{name} = %{EVRD}
+
+%description plugin-decklink
+DeckLink hardware support plugin for OBS Studio
+
+%files plugin-decklink
+%{_libdir}/%{oname}-plugins/decklink*.so
+
+#----------------------------------------------------------------------------
+%if %{with cef}
+%package plugin-browser
+Summary:	Web browser plugin for OBS Studio
+Group:		Video
+Requires:	%{name} = %{EVRD}
+
+%description plugin-browser
+Web browser plugin for OBS Studio
+
+%files plugin-browser -f browser.lang
+%{_libdir}/obs-plugins/obs-browser.so
+%{_libdir}/obs-plugins/chrome-sandbox
+%{_libdir}/obs-plugins/chrome*.pak
+%{_libdir}/obs-plugins/chrome_sandbox
+%{_libdir}/obs-plugins/icudtl.dat
+%{_libdir}/obs-plugins/libEGL.so
+%{_libdir}/obs-plugins/libGLESv2.so
+%{_libdir}/obs-plugins/libcef.so
+%{_libdir}/obs-plugins/libqt6_shim.so
+%{_libdir}/obs-plugins/libvk_swiftshader.so
+%{_libdir}/obs-plugins/libvulkan.so.1
+%{_libdir}/obs-plugins/obs-browser-page
+%{_libdir}/obs-plugins/resources.pak
+%{_libdir}/obs-plugins/snapshot_blob.bin
+%{_libdir}/obs-plugins/v8_context_snapshot.bin
+%{_libdir}/obs-plugins/vk_swiftshader_icd.json
+%endif
 #----------------------------------------------------------------------------
 
 %package -n %{libobs}
@@ -204,6 +267,7 @@ Scripting library for %{name}.
 
 %files -n %{libobsscripting}
 %{_libdir}/libobs-scripting.so.*
+%{_libdir}/libobs-scripting.so
 
 #----------------------------------------------------------------------------
 
@@ -246,3 +310,9 @@ cd ..
 
 %install
 %ninja_install -C build
+
+echo '%%dir %{_libdir}/obs-plugins/locales' >browser.lang
+for i in %{buildroot}%{_libdir}/obs-plugins/locales/*.pak; do
+	L="`basename $i .pak`"
+	echo "%%lang($L) %{_libdir}/obs-plugins/locales/$L.pak*" >>browser.lang
+done

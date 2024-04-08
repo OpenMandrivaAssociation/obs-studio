@@ -20,23 +20,3 @@ diff -up obs-studio-30.1.0/plugins/obs-browser/browser-app.cpp.omv~ obs-studio-3
  			CefRefPtr<CefV8Context> context = frame->GetV8Context();
  
  			context->Enter();
-diff -up obs-studio-30.1.0/plugins/obs-browser/cmake/os-linux.cmake.omv~ obs-studio-30.1.0/plugins/obs-browser/cmake/os-linux.cmake
---- obs-studio-30.1.0/plugins/obs-browser/cmake/os-linux.cmake.omv~	2024-03-13 14:09:18.382575463 +0100
-+++ obs-studio-30.1.0/plugins/obs-browser/cmake/os-linux.cmake	2024-03-13 14:10:19.971396804 +0100
-@@ -1,6 +1,6 @@
- find_package(X11 REQUIRED)
- 
--target_link_libraries(obs-browser PRIVATE CEF::Wrapper CEF::Library X11::X11)
-+target_link_libraries(obs-browser PRIVATE CEF::Library X11::X11)
- set_target_properties(obs-browser PROPERTIES BUILD_RPATH "$ORIGIN/" INSTALL_RPATH "$ORIGIN/")
- 
- add_executable(browser-helper)
-@@ -13,7 +13,7 @@ target_sources(
- target_include_directories(browser-helper PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/deps"
-                                                   "${CMAKE_CURRENT_SOURCE_DIR}/obs-browser-page")
- 
--target_link_libraries(browser-helper PRIVATE CEF::Wrapper CEF::Library)
-+target_link_libraries(browser-helper PRIVATE CEF::Library)
- 
- set(OBS_EXECUTABLE_DESTINATION "${OBS_PLUGIN_DESTINATION}")
- 

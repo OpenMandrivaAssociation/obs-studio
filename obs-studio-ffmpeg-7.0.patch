@@ -1,0 +1,12 @@
+diff -up obs-studio-30.1.1/plugins/obs-ffmpeg/ffmpeg-mux/ffmpeg-mux.c.omv~ obs-studio-30.1.1/plugins/obs-ffmpeg/ffmpeg-mux/ffmpeg-mux.c
+--- obs-studio-30.1.1/plugins/obs-ffmpeg/ffmpeg-mux/ffmpeg-mux.c.omv~	2024-04-08 15:22:36.871991837 +0200
++++ obs-studio-30.1.1/plugins/obs-ffmpeg/ffmpeg-mux/ffmpeg-mux.c	2024-04-08 15:22:46.904082834 +0200
+@@ -886,7 +886,7 @@ static int64_t ffmpeg_mux_seek_av_buffer
+ 	return 0;
+ }
+ 
+-static int ffmpeg_mux_write_av_buffer(void *opaque, uint8_t *buf, int buf_size)
++static int ffmpeg_mux_write_av_buffer(void *opaque, const uint8_t *buf, int buf_size)
+ {
+ 	struct ffmpeg_mux *ffm = opaque;
+ 
