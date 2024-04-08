@@ -1,6 +1,8 @@
 %define _disable_ld_no_undefined 1
 %define _disable_lto 1
 
+%bcond_without cef
+
 %define	libobs %mklibname obs
 %define	libobsfrontendapi  %mklibname obs-frontend-api
 %define	libobsscripting  %mklibname obs-scripting
@@ -35,6 +37,8 @@ Patch1:		obs-studio-29.1.0-clang16.patch
 # to see that the w32-pthreads dependency is only
 # in a condition that can never be true on a real OS
 Patch2:		no-w32-pthreads-dep.patch
+# Port the browser plugin to CEF 122.x
+Patch3:		obs-studio-cef-122.patch
 BuildRequires:	cmake ninja
 BuildRequires:	freetype-devel
 BuildRequires:	pkgconfig(alsa)
@@ -95,6 +99,9 @@ BuildRequires:	pkgconfig(luajit)
 BuildRequires:	swig
 BuildRequires:	mbedtls-devel
 BuildRequires:	sndio-devel
+%if %{with cef}
+BuildRequires:	cef-devel
+%endif
 
 # Build dependencies from restricted repo. If needed OSB-Studio can be moved to main repo and below deps disabled
 # Build with this deps only for OBS-Studio from restricted repo.
@@ -201,7 +208,7 @@ Scripting library for %{name}.
 #----------------------------------------------------------------------------
 
 %prep
-%autosetup -n %{name}-%{version}%{?beta:-%{beta}} -p1
+%setup -q -n %{name}-%{version}%{?beta:-%{beta}}
 
 cd plugins
 rmdir obs-browser obs-websocket
@@ -211,12 +218,19 @@ mv obs-browser-* obs-browser
 mv obs-websocket-* obs-websocket
 cd ..
 
+%autopatch -p1
+
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
 	-DOBS_VERSION_OVERRIDE="%{version}" \
 	-DENABLE_LIBFDK=ON \
   	-DENABLE_JACK=ON \
+%if %{with cef}
+	-DENABLE_BROWSER=ON \
+	-DCEF_ROOT_DIR=%{_libdir}/cef \
+%else
 	-DBUILD_BROWSER=OFF \
+%endif
 	-DENABLE_WEBSOCKET=OFF \
 	-DBUILD_VST=OFF \
 	-DENABLE_NEW_MPEGTS_OUTPUT=OFF \
