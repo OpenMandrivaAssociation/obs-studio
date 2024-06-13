@@ -103,6 +103,7 @@ BuildRequires:	pkgconfig(luajit)
 BuildRequires:	swig
 BuildRequires:	mbedtls-devel
 BuildRequires:	sndio-devel
+BuildRequires:  uthash-devel
 %if %{with cef}
 BuildRequires:	cef-devel
 %endif
