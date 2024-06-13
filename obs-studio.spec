@@ -41,7 +41,7 @@ Patch1:		obs-studio-29.1.0-clang16.patch
 Patch2:		no-w32-pthreads-dep.patch
 # Port the browser plugin to CEF 122.x
 Patch3:		obs-studio-cef-122.patch
-Patch4:		obs-studio-ffmpeg-7.0.patch
+#Patch4:		obs-studio-ffmpeg-7.0.patch
 BuildRequires:	cmake ninja
 BuildRequires:	freetype-devel
 BuildRequires:	pkgconfig(alsa)
