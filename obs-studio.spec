@@ -73,6 +73,7 @@ BuildRequires:	pkgconfig(libpci)
 BuildRequires:	pkgconfig(libssh2)
 BuildRequires:	pkgconfig(libidn2)
 BuildRequires:	pkgconfig(libvlc)
+BuildRequires:	pkgconfig(nlohmann_json)
 BuildRequires:	qt6-cmake
 BuildRequires:	qmake-qt6
 BuildRequires:	cmake(Qt6)
