@@ -245,6 +245,7 @@ Development files for %{name}
 %{_libdir}/libobs-frontend-api.so
 %{_libdir}/cmake/libobs
 %{_libdir}/cmake/obs-frontend-api
+%{_libdir}/cmake/obs-websocket-api/
 %{_libdir}/pkgconfig/libobs.pc
 
 #----------------------------------------------------------------------------
