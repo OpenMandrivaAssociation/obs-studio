@@ -18,7 +18,7 @@
 # This package requires x264 codec so we provide it in Restricted repository
 %define	distsuffix plf
 
-%define beta beta3
+%define beta beta4
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
