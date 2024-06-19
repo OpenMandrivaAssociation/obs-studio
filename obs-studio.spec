@@ -41,7 +41,7 @@ Patch1:		obs-studio-29.1.0-clang16.patch
 Patch2:		no-w32-pthreads-dep.patch
 # Port the browser plugin to CEF 122.x
 Patch3:		obs-studio-cef-122.patch
-Patch4:		openmandriva-relax-ffnvcodec-ver.patch
+
 BuildRequires:	cmake ninja
 BuildRequires:	freetype-devel
 BuildRequires:	pkgconfig(alsa)
@@ -304,6 +304,7 @@ cd ..
 	-DENABLE_NEW_MPEGTS_OUTPUT=OFF \
 	-DENABLE_AJA=OFF \
  	-DENABLE_WEBRTC=OFF \
+  	-DENABLE_NATIVE_NVENC:BOOL=OFF \
 %ifnarch %{x86_64}
 	-DENABLE_QSV11=OFF \
 %endif
