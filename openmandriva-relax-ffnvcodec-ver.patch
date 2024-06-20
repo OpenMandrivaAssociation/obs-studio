@@ -1,0 +1,24 @@
+diff -uraN obs-studio-30.2.0-beta4/plugins/obs-ffmpeg/cmake/dependencies.cmake omv-obs-studio-30.2.0-beta4/plugins/obs-ffmpeg/cmake/dependencies.cmake
+--- obs-studio-30.2.0-beta4/plugins/obs-ffmpeg/cmake/dependencies.cmake	2024-06-18 20:13:42.000000000 +0200
++++ omv-obs-studio-30.2.0-beta4/plugins/obs-ffmpeg/cmake/dependencies.cmake	2024-06-19 17:13:12.458684469 +0200
+@@ -42,7 +42,7 @@
+   target_sources(obs-nvenc-version INTERFACE obs-nvenc-ver.h)
+   target_include_directories(obs-nvenc-version INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}")
+ 
+-  find_package(FFnvcodec 12.0.0.0...<12.2.0.0 REQUIRED)
++  find_package(FFnvcodec 12.0.0.0...<12.3.0.0 REQUIRED)
+ 
+   if(OS_LINUX AND NOT TARGET OBS::glad)
+     add_subdirectory("${CMAKE_SOURCE_DIR}/deps/glad" "${CMAKE_BINARY_DIR}/deps/glad")
+diff -uraN obs-studio-30.2.0-beta4/plugins/obs-ffmpeg/cmake/legacy.cmake omv-obs-studio-30.2.0-beta4/plugins/obs-ffmpeg/cmake/legacy.cmake
+--- obs-studio-30.2.0-beta4/plugins/obs-ffmpeg/cmake/legacy.cmake	2024-06-18 20:13:42.000000000 +0200
++++ omv-obs-studio-30.2.0-beta4/plugins/obs-ffmpeg/cmake/legacy.cmake	2024-06-19 17:12:54.309587800 +0200
+@@ -116,7 +116,7 @@
+   target_link_libraries(obs-ffmpeg PRIVATE Libva::va Libva::drm LIBPCI::LIBPCI Libdrm::Libdrm)
+ 
+   if(ENABLE_NATIVE_NVENC)
+-    find_package(FFnvcodec 12.0.0.0...<12.2.0.0 REQUIRED)
++    find_package(FFnvcodec 12.0.0.0...<12.3.0.0 REQUIRED)
+     target_sources(obs-ffmpeg PRIVATE obs-nvenc.c obs-nvenc.h obs-nvenc-helpers.c obs-nvenc-ver.h)
+     target_link_libraries(obs-ffmpeg PRIVATE FFnvcodec::FFnvcodec OBS::obsglad)
+     target_compile_definitions(obs-ffmpeg PRIVATE NVCODEC_AVAILABLE)
