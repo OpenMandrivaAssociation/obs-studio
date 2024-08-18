@@ -22,14 +22,14 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	30.2.2
+Version:	30.2.3
 Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
 Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}%{?beta:-%{beta}}.tar.gz
 # git submodules that have gone missing in 28.0 tarballs
-Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-2a2879b5a69f4a99cd7459d8595af46cdb23115c.tar.gz
+Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-c710222ec9d7ef9aa5d7099e9019d636e2c89f00.tar.gz
 Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-0548c7798a323fe5296c150e13b898a5ee62fc1e.tar.gz
 #Source3:	https://github.com/obsproject/obs-amd-encoder/archive/5a1dafeddb4b37ca2ba2415cf88b40bff8aee428.tar.gz
 
