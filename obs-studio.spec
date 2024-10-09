@@ -34,7 +34,7 @@ Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-174b0
 #Source3:	https://github.com/obsproject/obs-amd-encoder/archive/5a1dafeddb4b37ca2ba2415cf88b40bff8aee428.tar.gz
 
 #Patch0:		%{name}-27.1.0-linkage.patch
-Patch1:		obs-studio-29.1.0-clang16.patch
+#Patch1:		obs-studio-29.1.0-clang16.patch
 # The cmake dependency generator isn't smart enough
 # to see that the w32-pthreads dependency is only
 # in a condition that can never be true on a real OS
