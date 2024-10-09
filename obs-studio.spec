@@ -40,7 +40,7 @@ Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-174b0
 # in a condition that can never be true on a real OS
 Patch2:		no-w32-pthreads-dep.patch
 # Port the browser plugin to CEF 122.x
-Patch3:		obs-studio-cef-122.patch
+#Patch3:		obs-studio-cef-122.patch
 
 BuildRequires:	cmake ninja
 BuildRequires:	freetype-devel
