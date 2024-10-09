@@ -18,19 +18,19 @@
 # This package requires x264 codec so we provide it in Restricted repository
 %define	distsuffix plf
 
-#define beta beta4
+%define beta beta1
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	30.2.3
+Version:	31.0.0
 Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
 Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}%{?beta:-%{beta}}.tar.gz
 # git submodules that have gone missing in 28.0 tarballs
-Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-c710222ec9d7ef9aa5d7099e9019d636e2c89f00.tar.gz
-Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-0548c7798a323fe5296c150e13b898a5ee62fc1e.tar.gz
+Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-c794b64be90c87387973098ca012a7f79483e1ff.tar.gz
+Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-174b07b135cbd77f6aed456e57d53f8626380224.tar.gz
 #Source3:	https://github.com/obsproject/obs-amd-encoder/archive/5a1dafeddb4b37ca2ba2415cf88b40bff8aee428.tar.gz
 
 #Patch0:		%{name}-27.1.0-linkage.patch
