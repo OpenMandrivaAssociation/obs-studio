@@ -17,6 +17,8 @@
 # Workaround: error: bitwise operation between different enumeration types ('enum multitrack_type_t' and 'enum packet_type_t') 
 # [-Werror,-Wenum-enum-conversion]
 %global optflags %{optflags} -Wno-error=enum-enum-conversion
+#error: 4 enumeration values not handled in switch: 'VIDEO_CS_DEFAULT', 'VIDEO_CS_601', 'VIDEO_CS_709'... [-Werror,-Wswitch]
+%global optflags %{optflags} -Wno-error=switch
 
 # This package requires x264 codec so we provide it in Restricted repository
 %define	distsuffix plf
