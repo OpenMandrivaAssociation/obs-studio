@@ -1,0 +1,11 @@
+diff -uraN obs-studio-31.0.0-beta1/plugins/obs-nvenc/nvenc-helpers.c omv-obs-studio-31.0.0-beta1/plugins/obs-nvenc/nvenc-helpers.c
+--- obs-studio-31.0.0-beta1/plugins/obs-nvenc/nvenc-helpers.c	2024-10-08 21:54:38.000000000 +0200
++++ omv-obs-studio-31.0.0-beta1/plugins/obs-nvenc/nvenc-helpers.c	2024-10-11 16:30:32.547889319 +0200
+@@ -171,6 +171,7 @@
+ 		RETURN_CASE(NV_ENC_ERR_INVALID_VERSION);
+ 		RETURN_CASE(NV_ENC_ERR_MAP_FAILED);
+ 		RETURN_CASE(NV_ENC_ERR_NEED_MORE_INPUT);
++		RETURN_CASE(NV_ENC_ERR_NEED_MORE_OUTPUT);
+ 		RETURN_CASE(NV_ENC_ERR_ENCODER_BUSY);
+ 		RETURN_CASE(NV_ENC_ERR_EVENT_NOT_REGISTERD);
+ 		RETURN_CASE(NV_ENC_ERR_GENERIC);
