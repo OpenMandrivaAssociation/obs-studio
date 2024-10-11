@@ -14,6 +14,9 @@
 
 # ffmpeg 6.1 deprecates a slew of things still used by obs
 %global optflags %{optflags} -Wno-error=deprecated-declarations
+# Workaround: error: bitwise operation between different enumeration types ('enum multitrack_type_t' and 'enum packet_type_t') 
+# [-Werror,-Wenum-enum-conversion]
+%global optflags %{optflags} -Wno-error=enum-enum-conversion
 
 # This package requires x264 codec so we provide it in Restricted repository
 %define	distsuffix plf
