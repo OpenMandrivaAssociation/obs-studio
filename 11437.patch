@@ -1,0 +1,58 @@
+From 30113ce9e66377c74ba22006aadbca5139641dc0 Mon Sep 17 00:00:00 2001
+From: tytan652 <tytan652@tytanium.xyz>
+Date: Tue, 22 Oct 2024 18:46:27 +0200
+Subject: [PATCH] cmake/plugins: Enable -Wswitch on GCC
+
+This warning is already enabled for Clang which causes issue for things
+that are usually built with MSVC or GCC (e.g. non-macOS plugins).
+
+obs-nvenc switch warning is also fixed in this commit.
+obs-qsv11 has switch warning set to not become errors.
+---
+ cmake/linux/compilerconfig.cmake  | 1 +
+ plugins/obs-nvenc/nvenc-helpers.c | 1 +
+ plugins/obs-qsv11/CMakeLists.txt  | 7 +++++++
+ 3 files changed, 9 insertions(+)
+
+diff --git a/cmake/linux/compilerconfig.cmake b/cmake/linux/compilerconfig.cmake
+index 92ab95735c1a11..8c2bcb0511af53 100644
+--- a/cmake/linux/compilerconfig.cmake
++++ b/cmake/linux/compilerconfig.cmake
+@@ -39,6 +39,7 @@ set(
+   -Wunused-value
+   -Wunused-variable
+   -Wvla
++  -Wswitch
+ )
+ 
+ add_compile_options(
+diff --git a/plugins/obs-nvenc/nvenc-helpers.c b/plugins/obs-nvenc/nvenc-helpers.c
+index f99067962ed47c..c6ea42131a9571 100644
+--- a/plugins/obs-nvenc/nvenc-helpers.c
++++ b/plugins/obs-nvenc/nvenc-helpers.c
+@@ -179,6 +179,7 @@ const char *nv_error_name(NVENCSTATUS err)
+ 		RETURN_CASE(NV_ENC_ERR_RESOURCE_REGISTER_FAILED);
+ 		RETURN_CASE(NV_ENC_ERR_RESOURCE_NOT_REGISTERED);
+ 		RETURN_CASE(NV_ENC_ERR_RESOURCE_NOT_MAPPED);
++		RETURN_CASE(NV_ENC_ERR_NEED_MORE_OUTPUT);
+ 	}
+ #undef RETURN_CASE
+ 
+diff --git a/plugins/obs-qsv11/CMakeLists.txt b/plugins/obs-qsv11/CMakeLists.txt
+index b6419b630f1641..b590a58e0a3741 100644
+--- a/plugins/obs-qsv11/CMakeLists.txt
++++ b/plugins/obs-qsv11/CMakeLists.txt
+@@ -35,6 +35,13 @@ target_sources(
+ 
+ target_compile_definitions(obs-qsv11 PRIVATE $<$<PLATFORM_ID:Windows>:DX11_D3D>)
+ 
++target_compile_options(
++  obs-qsv11
++  PRIVATE
++    $<$<COMPILE_LANG_AND_ID:C,GNU,Clang>:-Wno-error=switch>
++    $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang>:-Wno-error=switch>
++)
++
+ target_link_libraries(
+   obs-qsv11
+   PRIVATE
