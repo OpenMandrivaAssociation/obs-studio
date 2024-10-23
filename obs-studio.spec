@@ -42,6 +42,9 @@ Patch2:		no-w32-pthreads-dep.patch
 # Port the browser plugin to CEF 122.x
 #Patch3:		obs-studio-cef-122.patch
 
+# Fix build https://github.com/obsproject/obs-studio/issues/11436
+Patch4:		https://github.com/obsproject/obs-studio/pull/11437.patch
+
 BuildRequires:	cmake ninja
 BuildRequires:	freetype-devel
 BuildRequires:	pkgconfig(alsa)
@@ -143,6 +146,7 @@ This package is in the Restricted repository because it requires x264 codec.
 %files
 %{_bindir}/%{oname}
 %{_bindir}/%{oname}-ffmpeg-mux
+%{_bindir}/obs-nvenc-test
 %{_datadir}/applications/com.obsproject.Studio.desktop
 %{_datadir}/metainfo/com.obsproject.Studio.metainfo.xml
 %dir %{_datadir}/%{oname}/
@@ -247,6 +251,7 @@ Development files for %{name}
 %{_libdir}/cmake/obs-frontend-api
 %{_libdir}/cmake/obs-websocket-api/
 %{_libdir}/pkgconfig/libobs.pc
+%{_libdir}/pkgconfig/obs-frontend-api.pc
 
 #----------------------------------------------------------------------------
 
