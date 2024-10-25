@@ -143,6 +143,7 @@ This package is in the Restricted repository because it requires x264 codec.
 %files
 %{_bindir}/%{oname}
 %{_bindir}/%{oname}-ffmpeg-mux
+%{_bindir}/obs-nvenc-test
 %{_datadir}/applications/com.obsproject.Studio.desktop
 %{_datadir}/metainfo/com.obsproject.Studio.metainfo.xml
 %dir %{_datadir}/%{oname}/
@@ -247,6 +248,7 @@ Development files for %{name}
 %{_libdir}/cmake/obs-frontend-api
 %{_libdir}/cmake/obs-websocket-api/
 %{_libdir}/pkgconfig/libobs.pc
+%{_libdir}/pkgconfig/obs-frontend-api.pc
 
 #----------------------------------------------------------------------------
 
