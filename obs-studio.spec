@@ -15,6 +15,10 @@
 # ffmpeg 6.1 deprecates a slew of things still used by obs
 %global optflags %{optflags} -Wno-error=deprecated-declarations
 
+# as of obs 31.0.0 and clang 19.1.2 needed or build failed with: call to '_curl_easy_setopt_err_write_callback' 
+# declared with 'warning' attribute: curl_easy_setopt expects a curl_write_callback argument for this option [-Werror,-Wattribute-warning]
+%global optflags %{optflags} -Wno-error=attribute-warning
+
 # This package requires x264 codec so we provide it in Restricted repository
 %define	distsuffix plf
 
