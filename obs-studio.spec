@@ -15,32 +15,37 @@
 # ffmpeg 6.1 deprecates a slew of things still used by obs
 %global optflags %{optflags} -Wno-error=deprecated-declarations
 
+# as of obs 31.0.0 and clang 19.1.2 needed or build failed with: call to '_curl_easy_setopt_err_write_callback' 
+# declared with 'warning' attribute: curl_easy_setopt expects a curl_write_callback argument for this option [-Werror,-Wattribute-warning]
+%global optflags %{optflags} -Wno-error=attribute-warning
+
 # This package requires x264 codec so we provide it in Restricted repository
 %define	distsuffix plf
 
-#define beta beta4
+#define beta rc1
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	30.2.3
+Version:	31.0.0
 Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
 Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}%{?beta:-%{beta}}.tar.gz
 # git submodules that have gone missing in 28.0 tarballs
-Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-c710222ec9d7ef9aa5d7099e9019d636e2c89f00.tar.gz
-Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-0548c7798a323fe5296c150e13b898a5ee62fc1e.tar.gz
+Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-a76b4d8810a0a33e91ac5b76a0b1af2f22bf8efd.tar.gz
+Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-eed8a49933786383d11f4868a4e5604a9ee303c6.tar.gz
 #Source3:	https://github.com/obsproject/obs-amd-encoder/archive/5a1dafeddb4b37ca2ba2415cf88b40bff8aee428.tar.gz
 
 #Patch0:		%{name}-27.1.0-linkage.patch
-Patch1:		obs-studio-29.1.0-clang16.patch
+#Patch1:		obs-studio-29.1.0-clang16.patch
 # The cmake dependency generator isn't smart enough
 # to see that the w32-pthreads dependency is only
 # in a condition that can never be true on a real OS
 Patch2:		no-w32-pthreads-dep.patch
 # Port the browser plugin to CEF 122.x
-Patch3:		obs-studio-cef-122.patch
+#Patch3:		obs-studio-cef-122.patch
+Patch3:		https://patch-diff.githubusercontent.com/raw/obsproject/obs-studio/pull/11618.patch
 
 BuildRequires:	cmake ninja
 BuildRequires:	freetype-devel
@@ -143,6 +148,7 @@ This package is in the Restricted repository because it requires x264 codec.
 %files
 %{_bindir}/%{oname}
 %{_bindir}/%{oname}-ffmpeg-mux
+%{_bindir}/obs-nvenc-test
 %{_datadir}/applications/com.obsproject.Studio.desktop
 %{_datadir}/metainfo/com.obsproject.Studio.metainfo.xml
 %dir %{_datadir}/%{oname}/
@@ -247,6 +253,7 @@ Development files for %{name}
 %{_libdir}/cmake/obs-frontend-api
 %{_libdir}/cmake/obs-websocket-api/
 %{_libdir}/pkgconfig/libobs.pc
+%{_libdir}/pkgconfig/obs-frontend-api.pc
 
 #----------------------------------------------------------------------------
 
@@ -304,7 +311,7 @@ cd ..
 	-DENABLE_NEW_MPEGTS_OUTPUT=OFF \
 	-DENABLE_AJA=OFF \
  	-DENABLE_WEBRTC=OFF \
-  	-DENABLE_NATIVE_NVENC:BOOL=OFF \
+  	-DENABLE_NATIVE_NVENC:BOOL=ON \
 %ifnarch %{x86_64}
 	-DENABLE_QSV11=OFF \
 %endif
