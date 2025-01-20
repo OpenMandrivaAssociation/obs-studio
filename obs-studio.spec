@@ -26,7 +26,7 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	31.0.0
+Version:	31.0.1
 Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2+
 Group:		Video
@@ -45,7 +45,7 @@ Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-eed8a
 Patch2:		no-w32-pthreads-dep.patch
 # Port the browser plugin to CEF 122.x
 #Patch3:		obs-studio-cef-122.patch
-Patch3:		https://patch-diff.githubusercontent.com/raw/obsproject/obs-studio/pull/11618.patch
+#Patch3:		https://patch-diff.githubusercontent.com/raw/obsproject/obs-studio/pull/11618.patch
 
 BuildRequires:	cmake ninja
 BuildRequires:	freetype-devel
