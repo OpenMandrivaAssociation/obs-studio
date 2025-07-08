@@ -121,7 +121,7 @@ BuildRequires:	mbedtls-devel
 BuildRequires:	sndio-devel
 BuildRequires:  uthash-devel
 %if %{with cef}
-BuildRequires:	cef-devel
+#BuildRequires:	cef-devel
 %endif
 
 # Build dependencies from restricted repo. If needed OSB-Studio can be moved to main repo and below deps disabled
