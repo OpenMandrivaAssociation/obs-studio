@@ -3,7 +3,7 @@
 
 # Current status of CEF plugin: It compiles, but crashes when trying
 # to use the browser
-%bcond_with cef
+#bcond_with cef
 %bcond_without cef-external
 %define cef_version 6533
 
@@ -317,12 +317,6 @@ tar -xf %{SOURCE4}
 	-DOBS_VERSION_OVERRIDE="%{version}" \
 	-DENABLE_LIBFDK=ON \
   	-DENABLE_JACK=ON \
-%if %{with cef}
-	-DENABLE_BROWSER=ON \
-	-DCEF_ROOT_DIR=%{_libdir}/cef \
-%else
-	-DBUILD_BROWSER=OFF \
-%endif
 %if %{with cef-external}
  	-DENABLE_BROWSER=ON \
 %if %{x86_64}  
