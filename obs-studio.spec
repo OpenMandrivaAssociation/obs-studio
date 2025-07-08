@@ -47,6 +47,8 @@ Patch2:		no-w32-pthreads-dep.patch
 #Patch3:		obs-studio-cef-122.patch
 #Patch3:		https://patch-diff.githubusercontent.com/raw/obsproject/obs-studio/pull/11618.patch
 
+Patch3:		clang.patch
+
 BuildRequires:	cmake ninja
 BuildRequires:	cmake(ECM)
 BuildRequires:	freetype-devel
@@ -295,8 +297,7 @@ mv obs-websocket-* obs-websocket
 cd ..
 
 %autopatch -p1
-export CC=gcc
-export CXX=g++
+
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
 	-DOBS_VERSION_OVERRIDE="%{version}" \
@@ -320,8 +321,6 @@ export CXX=g++
 	-G Ninja
 
 %build
-export CC=gcc
-export CXX=g++
 %ninja_build -C build
 
 %install
