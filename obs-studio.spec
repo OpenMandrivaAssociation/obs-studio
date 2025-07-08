@@ -48,6 +48,7 @@ Patch2:		no-w32-pthreads-dep.patch
 #Patch3:		https://patch-diff.githubusercontent.com/raw/obsproject/obs-studio/pull/11618.patch
 
 BuildRequires:	cmake ninja
+BuildRequires:	cmake(ECM)
 BuildRequires:	freetype-devel
 BuildRequires:	pkgconfig(alsa)
 BuildRequires:	pkgconfig(cryptopp)
