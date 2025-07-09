@@ -3,7 +3,7 @@
 
 # Current status of CEF plugin: It compiles, but crashes when trying
 # to use the browser
-bcond_without cef
+%bcond_without cef
 %define cef_version 6533
 
 %define	libobs %mklibname obs
