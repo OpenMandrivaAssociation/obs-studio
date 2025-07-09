@@ -321,10 +321,10 @@ tar -xf %{SOURCE4}
 %if %{with cef-external}
  	-DENABLE_BROWSER=ON \
 %if %{x86_64}  
- 	-DCEF_ROOT_DIR="../cef_binary_%{cef_version}_linux_x86_64_v3" \
+ 	-DCEF_ROOT_DIR="../cef_binary_%{cef_version}_linux_x86_64" \
 %endif
 %if %{aarch64}
-	-DCEF_ROOT_DIR="../cef_binary_%{cef_version}__linux_aarch64_v4" \
+	-DCEF_ROOT_DIR="../cef_binary_%{cef_version}__linux_aarch64" \
 %endif
 %else
 	-DBUILD_BROWSER=OFF \
