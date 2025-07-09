@@ -211,22 +211,22 @@ Requires:	%{name} = %{EVRD}
 Web browser plugin for OBS Studio
 
 %files plugin-browser -f browser.lang
-%{_libdir}/obs-plugins/obs-browser.so
-%{_libdir}/obs-plugins/chrome-sandbox
-%{_libdir}/obs-plugins/chrome*.pak
-%{_libdir}/obs-plugins/chrome_sandbox
-%{_libdir}/obs-plugins/icudtl.dat
-%{_libdir}/obs-plugins/libEGL.so
-%{_libdir}/obs-plugins/libGLESv2.so
-%{_libdir}/obs-plugins/libcef.so
-%{_libdir}/obs-plugins/libqt6_shim.so
-%{_libdir}/obs-plugins/libvk_swiftshader.so
-%{_libdir}/obs-plugins/libvulkan.so.1
-%{_libdir}/obs-plugins/obs-browser-page
-%{_libdir}/obs-plugins/resources.pak
-%{_libdir}/obs-plugins/snapshot_blob.bin
-%{_libdir}/obs-plugins/v8_context_snapshot.bin
-%{_libdir}/obs-plugins/vk_swiftshader_icd.json
+#{_libdir}/obs-plugins/obs-browser.so
+#{_libdir}/obs-plugins/chrome-sandbox
+#{_libdir}/obs-plugins/chrome*.pak
+#{_libdir}/obs-plugins/chrome_sandbox
+#{_libdir}/obs-plugins/icudtl.dat
+#{_libdir}/obs-plugins/libEGL.so
+#{_libdir}/obs-plugins/libGLESv2.so
+#{_libdir}/obs-plugins/libcef.so
+#{_libdir}/obs-plugins/libqt6_shim.so
+#{_libdir}/obs-plugins/libvk_swiftshader.so
+#{_libdir}/obs-plugins/libvulkan.so.1
+#{_libdir}/obs-plugins/obs-browser-page
+#{_libdir}/obs-plugins/resources.pak
+#{_libdir}/obs-plugins/snapshot_blob.bin
+#{_libdir}/obs-plugins/v8_context_snapshot.bin
+#{_libdir}/obs-plugins/vk_swiftshader_icd.json
 %endif
 #----------------------------------------------------------------------------
 
