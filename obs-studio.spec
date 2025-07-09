@@ -3,8 +3,7 @@
 
 # Current status of CEF plugin: It compiles, but crashes when trying
 # to use the browser
-#bcond_with cef
-%bcond_without cef-external
+bcond_without cef
 %define cef_version 6533
 
 %define	libobs %mklibname obs
@@ -302,14 +301,10 @@ tar xf %{S:2}
 mv obs-browser-* obs-browser
 mv obs-websocket-* obs-websocket
 cd ..
-%if %{with cef-external}
-%if %{x86_64}
+%if %{with cef}
 tar -xf %{SOURCE3}
 %endif
-%if %{aarch64}
-tar -xf %{SOURCE4}
-%endif
-%endif
+
 
 %autopatch -p1
 
@@ -318,14 +313,9 @@ tar -xf %{SOURCE4}
 	-DOBS_VERSION_OVERRIDE="%{version}" \
 	-DENABLE_LIBFDK=ON \
   	-DENABLE_JACK=ON \
-%if %{with cef-external}
+%if %{with cef}
  	-DENABLE_BROWSER=ON \
-%if %{x86_64}  
  	-DCEF_ROOT_DIR="../cef_binary_%{cef_version}_linux_x86_64" \
-%endif
-%if %{aarch64}
-	-DCEF_ROOT_DIR="../cef_binary_%{cef_version}__linux_aarch64" \
-%endif
 %else
 	-DBUILD_BROWSER=OFF \
 %endif
