@@ -3,8 +3,7 @@
 
 # Current status of CEF plugin: It compiles, but crashes when trying
 # to use the browser
-#bcond_with cef
-%bcond_without cef-external
+%bcond_without cef
 %define cef_version 6533
 
 %define	libobs %mklibname obs
@@ -38,8 +37,11 @@ Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{vers
 Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-033a23befe01e0a2f85b95af384a89b82c8d6a40.tar.gz
 Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-40d26dbf4d29137bf88cd393a3031adb04d68bba.tar.gz
 #Source3:	https://github.com/obsproject/obs-amd-encoder/archive/5a1dafeddb4b37ca2ba2415cf88b40bff8aee428.tar.gz
+%if %{with cef}
+# Keep using it, intil we can provide system cef
 Source3:	https://cdn-fastly.obsproject.com/downloads/cef_binary_%{cef_version}_linux_x86_64_v3.tar.xz
 Source4:	https://cdn-fastly.obsproject.com/downloads/cef_binary_%{cef_version}_linux_aarch64_v4.tar.xz
+%endif
 
 #Patch0:		%{name}-27.1.0-linkage.patch
 #Patch1:		obs-studio-29.1.0-clang16.patch
@@ -302,7 +304,7 @@ tar xf %{S:2}
 mv obs-browser-* obs-browser
 mv obs-websocket-* obs-websocket
 cd ..
-%if %{with cef-external}
+%if %{with cef}
 %if %{x86_64}
 tar -xf %{SOURCE3}
 %endif
@@ -318,7 +320,7 @@ tar -xf %{SOURCE4}
 	-DOBS_VERSION_OVERRIDE="%{version}" \
 	-DENABLE_LIBFDK=ON \
   	-DENABLE_JACK=ON \
-%if %{with cef-external}
+%if %{with cef}
  	-DENABLE_BROWSER=ON \
 %if %{x86_64}  
  	-DCEF_ROOT_DIR="../cef_binary_%{cef_version}_linux_x86_64" \
@@ -339,6 +341,8 @@ tar -xf %{SOURCE4}
 	-DENABLE_QSV11=OFF \
 %endif
 	-G Ninja
+# Use it in case of system cef and not external/ 
+# -DCEF_ROOT_DIR=%{_libdir}/cef \
 
 %build
 %ninja_build -C build
