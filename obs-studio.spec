@@ -216,6 +216,7 @@ Requires:	%{name} = %{EVRD}
 Web browser plugin for OBS Studio
 
 %files plugin-browser -f browser.lang
+%{_libdir}/obs-plugins/obs-browser.so
 %{_libdir}/obs-plugins/chrome-sandbox
 %{_libdir}/obs-plugins/chrome_100_percent.pak
 %{_libdir}/obs-plugins/chrome_200_percent.pak
