@@ -305,10 +305,10 @@ mv obs-browser-* obs-browser
 mv obs-websocket-* obs-websocket
 cd ..
 %if %{with cef}
-%if %{x86_64}
+%ifarch %{x86_64}
 tar -xf %{SOURCE3}
 %endif
-%if %{aarch64}
+%ifarch %{aarch64}
 tar -xf %{SOURCE4}
 %endif
 %endif
@@ -322,11 +322,11 @@ tar -xf %{SOURCE4}
   	-DENABLE_JACK=ON \
 %if %{with cef}
  	-DENABLE_BROWSER=ON \
-%if %{x86_64}  
+%ifarch %{x86_64}  
  	-DCEF_ROOT_DIR="../cef_binary_%{cef_version}_linux_x86_64" \
 %endif
-%if %{aarch64}
-	-DCEF_ROOT_DIR="../cef_binary_%{cef_version}__linux_aarch64" \
+%ifarch %{aarch64}
+	-DCEF_ROOT_DIR="../cef_binary_%{cef_version}_linux_aarch64" \
 %endif
 %else
 	-DBUILD_BROWSER=OFF \
