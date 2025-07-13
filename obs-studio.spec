@@ -39,8 +39,8 @@ Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-40d26
 #Source3:	https://github.com/obsproject/obs-amd-encoder/archive/5a1dafeddb4b37ca2ba2415cf88b40bff8aee428.tar.gz
 %if %{with cef}
 # Keep using it, intil we can provide system cef
-Source3:	https://cdn-fastly.obsproject.com/downloads/cef_binary_%{cef_version}_linux_x86_64_v3.tar.xz
-Source4:	https://cdn-fastly.obsproject.com/downloads/cef_binary_%{cef_version}_linux_aarch64_v4.tar.xz
+Source3:	https://cdn-fastly.obsproject.com/downloads/cef_binary_%{cef_version}_linux_x86_64_v5.tar.xz
+Source4:	https://cdn-fastly.obsproject.com/downloads/cef_binary_%{cef_version}_linux_aarch64_v5.tar.xz
 %endif
 
 #Patch0:		%{name}-27.1.0-linkage.patch
