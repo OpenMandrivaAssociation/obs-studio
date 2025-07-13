@@ -2,5 +2,5 @@ sources:
   obs-browser-bdabf8300ecefeb566b81f4a7ff75f8a8e21f62b.tar.gz: 3a9292e5fc7a43c7a6488a515ff32b0759eefb02
   obs-websocket-40d26dbf4d29137bf88cd393a3031adb04d68bba.tar.gz: a59f8efa4ca9b9e744e47092105df1506a64154a
   obs-studio-31.1.1.tar.gz: 47569f9465df7d489bb7c265d7d6e0aff0417662
-  cef_binary_6533_linux_x86_64_v3.tar.xz: 77e70348c401dd92107e6939f8b2164be073ba55
-  cef_binary_6533_linux_aarch64_v4.tar.xz: 3020696390f370c7d5dbf35948a78b641e51464f
+  cef_binary_6533_linux_x86_64_v5.tar.xz: 56f612e665c9e507b2cbe3725d34af8fc92b139b
+  cef_binary_6533_linux_aarch64_v5.tar.xz: 72bd78ecff17c171699ac943b252cf79376183e4
