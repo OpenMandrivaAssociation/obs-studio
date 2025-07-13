@@ -314,7 +314,8 @@ tar -xf %{SOURCE4}
 %endif
 
 %autopatch -p1
-
+export CC=gcc
+export CXX=g++
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
 	-DOBS_VERSION_OVERRIDE="%{version}" \
@@ -345,6 +346,8 @@ tar -xf %{SOURCE4}
 # -DCEF_ROOT_DIR=%{_libdir}/cef \
 
 %build
+export CC=gcc
+export CXX=g++
 %ninja_build -C build
 
 %install
