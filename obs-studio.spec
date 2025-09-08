@@ -81,6 +81,7 @@ BuildRequires:	pkgconfig(libvlc)
 BuildRequires:	pkgconfig(nlohmann_json)
 BuildRequires:	qt6-cmake
 BuildRequires:	qmake-qt6
+BuildRequires:	cmake(ECM)
 BuildRequires:	cmake(Qt6)
 BuildRequires:	cmake(Qt6Core)
 BuildRequires:	cmake(Qt6DBus)
