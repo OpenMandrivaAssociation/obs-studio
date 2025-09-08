@@ -46,6 +46,8 @@ Patch2:		no-w32-pthreads-dep.patch
 # Port the browser plugin to CEF 122.x
 #Patch3:		obs-studio-cef-122.patch
 #Patch3:		https://patch-diff.githubusercontent.com/raw/obsproject/obs-studio/pull/11618.patch
+Patch4:		obs-studio-qt-6.10.patch
+Patch5:		obs-studio-ffmpeg-8.0.patch
 
 BuildRequires:	cmake ninja
 BuildRequires:	freetype-devel
