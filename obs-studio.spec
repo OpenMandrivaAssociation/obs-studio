@@ -151,7 +151,8 @@ This package is in the Restricted repository because it requires x264 codec.
 %files
 %{_bindir}/%{oname}
 %{_bindir}/%{oname}-ffmpeg-mux
-%{_bindir}/obs-nvenc-test
+# Currently built only on x86_64
+%optional %{_bindir}/obs-nvenc-test
 %{_datadir}/applications/com.obsproject.Studio.desktop
 %{_datadir}/metainfo/com.obsproject.Studio.metainfo.xml
 %dir %{_datadir}/%{oname}/
