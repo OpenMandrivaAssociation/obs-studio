@@ -134,6 +134,11 @@ Requires:	libva2
 Requires: x264
 Requires: x265
 Requires: %{_lib}Qt6WlShellIntegration
+#lib64vpx lib64aom lib64svt-av1 rav1e are required for streaming to youtube in HDR p010 rec 2100 PQ
+BuildRequires: lib64vpx
+BuildRequires: lib64aom-devel
+BuildRequires: lib64svt-av1-devel
+BuildRequires: rav1e-devel
 
 # Used via dlopen() so require them, otherwise they don't get installed
 Requires:	%{libobs} = %{EVRD}
@@ -317,6 +322,10 @@ cd ..
  	-DENABLE_WEBRTC=OFF \
   	-DENABLE_NATIVE_NVENC:BOOL=ON \
     -DENABLE_VPX=ON \
+	-DENABLE_AOM=ON \
+    -DENABLE_SVT=ON \
+    -DENABLE_RAV1E=ON \
+
 %ifnarch %{x86_64}
 	-DENABLE_QSV11=OFF \
 %endif
