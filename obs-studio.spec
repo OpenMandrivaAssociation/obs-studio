@@ -26,8 +26,8 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	32.0.2
-Release:	%{?beta:0.%{beta}.}2
+Version:	32.1.0
+Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
@@ -46,7 +46,6 @@ Patch2:		no-w32-pthreads-dep.patch
 # Port the browser plugin to CEF 122.x
 #Patch3:		obs-studio-cef-122.patch
 #Patch3:		https://patch-diff.githubusercontent.com/raw/obsproject/obs-studio/pull/11618.patch
-Patch4:		obs-studio-qt-6.10.patch
 
 BuildRequires:	cmake ninja
 BuildRequires:	freetype-devel
@@ -163,7 +162,9 @@ This package is in the Restricted repository because it requires x264 codec.
 %{_libdir}/%{oname}-plugins/image-source.so
 %{_libdir}/%{oname}-plugins/linux-*.so
 %{_libdir}/%{oname}-plugins/obs-*.so
+%if %{with cef}
 %exclude %{_libdir}/%{oname}-plugins/obs-browser.so
+%endif
 %{_libdir}/%{oname}-plugins/rtmp-services.so
 %{_libdir}/%{oname}-plugins/text-freetype2.so
 %{_libdir}/obs-scripting
