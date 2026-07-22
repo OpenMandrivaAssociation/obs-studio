@@ -26,15 +26,15 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	32.1.2
-Release:	%{?beta:0.%{beta}.}1
+Version:	32.2.1
+Release:	%{?beta:0.%{beta}.}2
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
 Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}%{?beta:-%{beta}}.tar.gz
 # git submodules that have gone missing in 28.0 tarballs
-Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-ea04212e4bbadd077f9e6038758c4e4779c24fa3.tar.gz
-Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-1fcb95b15aa88b1b7e9bda3f9c8650e314377169.tar.gz
+Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-3f0a2cdf378939ebe3c6f9ab36d4ea100c25aac2.tar.gz
+Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-1ef34bf48110c2a18184e50e41cd0b1a855e2147.tar.gz
 #Source3:	https://github.com/obsproject/obs-amd-encoder/archive/5a1dafeddb4b37ca2ba2415cf88b40bff8aee428.tar.gz
 
 #Patch0:		%{name}-27.1.0-linkage.patch
@@ -57,6 +57,8 @@ BuildRequires:  pkgconfig(ffnvcodec)
 BuildRequires:	pkgconfig(gl)
 BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(jansson)
+BuildRequires:	pkgconfig(lber)
+BuildRequires:	pkgconfig(ldap)
 BuildRequires:	pkgconfig(libavcodec)
 BuildRequires:	pkgconfig(libavdevice)
 BuildRequires:	pkgconfig(libavformat)
@@ -72,12 +74,12 @@ BuildRequires:	pkgconfig(libswscale)
 BuildRequires:	pkgconfig(libva)
 BuildRequires:	pkgconfig(libv4l2)
 BuildRequires:	pkgconfig(libvlc)
+BuildRequires:	pkgconfig(vpx)
 BuildRequires:	pkgconfig(MagickCore)
 BuildRequires:	pkgconfig(xkbcommon)
 BuildRequires:	pkgconfig(libpci)
 BuildRequires:	pkgconfig(libssh2)
 BuildRequires:	pkgconfig(libidn2)
-BuildRequires:	pkgconfig(libvlc)
 BuildRequires:	pkgconfig(nlohmann_json)
 BuildRequires:	pkgconfig(simde)
 BuildRequires:	qt6-cmake
@@ -109,10 +111,12 @@ BuildRequires:	pkgconfig(xcomposite)
 BuildRequires:	pkgconfig(xfixes)
 BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(luajit)
+BuildRequires:	qt6-qtbase-theme-gtk3
 BuildRequires:	swig
 BuildRequires:	mbedtls-devel
 BuildRequires:	sndio-devel
 BuildRequires:  uthash-devel
+BuildRequires:	atomic-devel
 %if %{with cef}
 BuildRequires:	cef-devel
 %endif
@@ -317,12 +321,15 @@ cd ..
 	-DENABLE_AJA=OFF \
  	-DENABLE_WEBRTC=OFF \
   	-DENABLE_NATIVE_NVENC:BOOL=ON \
+  	-DENABLE_VPX=ON \
 %ifnarch %{x86_64}
 	-DENABLE_QSV11=OFF \
 %endif
 	-G Ninja
 
 %build
+export CC=gcc
+export CXX=g++
 %ninja_build -C build
 
 %install
