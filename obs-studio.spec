@@ -27,7 +27,7 @@
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
 Version:	32.2.1
-Release:	%{?beta:0.%{beta}.}2
+Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
@@ -116,7 +116,6 @@ BuildRequires:	swig
 BuildRequires:	mbedtls-devel
 BuildRequires:	sndio-devel
 BuildRequires:  uthash-devel
-BuildRequires:	atomic-devel
 %if %{with cef}
 BuildRequires:	cef-devel
 %endif
@@ -328,8 +327,6 @@ cd ..
 	-G Ninja
 
 %build
-export CC=gcc
-export CXX=g++
 %ninja_build -C build
 
 %install
