@@ -27,7 +27,7 @@
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
 Version:	32.2.1
-Release:	%{?beta:0.%{beta}.}2
+Release:	%{?beta:0.%{beta}.}3
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
@@ -306,6 +306,8 @@ cd ..
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
 	-DOBS_VERSION_OVERRIDE="%{version}" \
+	-DCMAKE_CXX_STANDARD=20 \
+	-DCMAKE_CXX_STANDARD_REQUIRED=ON \
 	-DENABLE_LIBFDK=ON \
   	-DENABLE_JACK=ON \
 %if %{with cef}
