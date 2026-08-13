@@ -3,7 +3,7 @@
 
 # Current status of CEF plugin: It compiles, but crashes when trying
 # to use the browser
-%bcond_with cef
+%bcond_without cef
 
 %define	libobs %mklibname obs
 %define	libobsfrontendapi  %mklibname obs-frontend-api
@@ -27,7 +27,7 @@
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
 Version:	32.2.1
-Release:	%{?beta:0.%{beta}.}1
+Release:	%{?beta:0.%{beta}.}2
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
