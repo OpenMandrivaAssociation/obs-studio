@@ -1,9 +1,9 @@
 %define _disable_ld_no_undefined 1
 %define _disable_lto 1
 
-# Current status of CEF plugin: It compiles, but crashes when trying
-# to use the browser
-%bcond_without cef
+# CEF browser helper needs C++20 concepts; also historically crashes at runtime.
+# Keep optional: build with --with cef once CEF headers build cleanly with system clang.
+%bcond_with cef
 
 %define	libobs %mklibname obs
 %define	libobsfrontendapi  %mklibname obs-frontend-api
@@ -27,7 +27,7 @@
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
 Version:	32.2.1
-Release:	%{?beta:0.%{beta}.}3
+Release:	%{?beta:0.%{beta}.}4
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
@@ -303,11 +303,14 @@ cd ..
 
 %autopatch -p1
 
+# Force C++20 for all targets (incl. obs-browser helper); CMAKE_CXX_STANDARD
+# alone is not always applied to CEF browser-helper subdir.
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
 	-DOBS_VERSION_OVERRIDE="%{version}" \
 	-DCMAKE_CXX_STANDARD=20 \
 	-DCMAKE_CXX_STANDARD_REQUIRED=ON \
+	-DCMAKE_CXX_FLAGS="%{optflags} -std=c++20" \
 	-DENABLE_LIBFDK=ON \
   	-DENABLE_JACK=ON \
 %if %{with cef}
