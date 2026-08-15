@@ -1,9 +1,9 @@
 %define _disable_ld_no_undefined 1
 %define _disable_lto 1
 
-# CEF browser helper needs C++20 concepts; also historically crashes at runtime.
-# Keep optional: build with --with cef once CEF headers build cleanly with system clang.
-%bcond_with cef
+# Browser source/panels via system CEF (libcef from the cef package / helium build).
+# Disable with --without cef if CEF is unavailable for the target arch.
+%bcond_without cef
 
 %define	libobs %mklibname obs
 %define	libobsfrontendapi  %mklibname obs-frontend-api
@@ -26,8 +26,8 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	32.2.1
-Release:	%{?beta:0.%{beta}.}4
+Version:	32.2.2
+Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
@@ -37,15 +37,15 @@ Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-3f0a2cdf3
 Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-1ef34bf48110c2a18184e50e41cd0b1a855e2147.tar.gz
 #Source3:	https://github.com/obsproject/obs-amd-encoder/archive/5a1dafeddb4b37ca2ba2415cf88b40bff8aee428.tar.gz
 
-#Patch0:		%{name}-27.1.0-linkage.patch
+#Patch0:		obs-studio-27.1.0-linkage.patch
 #Patch1:		obs-studio-29.1.0-clang16.patch
 # The cmake dependency generator isn't smart enough
 # to see that the w32-pthreads dependency is only
 # in a condition that can never be true on a real OS
 Patch2:		no-w32-pthreads-dep.patch
-# Port the browser plugin to CEF 122.x
-#Patch3:		obs-studio-cef-122.patch
-#Patch3:		https://patch-diff.githubusercontent.com/raw/obsproject/obs-studio/pull/11618.patch
+# System CEF: C++20, rpath into the CEF Release dir, system resources/locales,
+# do not bundle a private copy of libcef next to the plugin.
+Patch3:		obs-studio-system-cef.patch
 
 BuildRequires:	cmake ninja
 BuildRequires:	freetype-devel
@@ -117,7 +117,9 @@ BuildRequires:	mbedtls-devel
 BuildRequires:	sndio-devel
 BuildRequires:  uthash-devel
 %if %{with cef}
-BuildRequires:	cef-devel
+# 151.0.7922.137+ is the Helium CEF that links system libav* (no libffmpeg.so).
+# Older cef still ships a private libffmpeg.so that clashes with OBS.
+BuildRequires:	cef-devel >= 151.0.7922.137
 %endif
 
 # Build dependencies from restricted repo. If needed OSB-Studio can be moved to main repo and below deps disabled
@@ -205,27 +207,18 @@ DeckLink hardware support plugin for OBS Studio
 Summary:	Web browser plugin for OBS Studio
 Group:		Video
 Requires:	%{name} = %{EVRD}
+# libcef + Resources/locales live in the system cef package.
+# 151.0.7922.137+ links system FFmpeg; older cef still has libffmpeg.so.
+Requires:	cef >= 151.0.7922.137
 
 %description plugin-browser
-Web browser plugin for OBS Studio
+Web browser (CEF) source and dock panels for OBS Studio.
+Uses the system Chromium Embedded Framework (cef package) and its
+system FFmpeg, so libcef and OBS share one libav*.
 
-%files plugin-browser -f browser.lang
+%files plugin-browser
 %{_libdir}/obs-plugins/obs-browser.so
-%{_libdir}/obs-plugins/chrome-sandbox
-%{_libdir}/obs-plugins/chrome*.pak
-%{_libdir}/obs-plugins/chrome_sandbox
-%{_libdir}/obs-plugins/icudtl.dat
-%{_libdir}/obs-plugins/libEGL.so
-%{_libdir}/obs-plugins/libGLESv2.so
-%{_libdir}/obs-plugins/libcef.so
-%{_libdir}/obs-plugins/libqt6_shim.so
-%{_libdir}/obs-plugins/libvk_swiftshader.so
-%{_libdir}/obs-plugins/libvulkan.so.1
 %{_libdir}/obs-plugins/obs-browser-page
-%{_libdir}/obs-plugins/resources.pak
-%{_libdir}/obs-plugins/snapshot_blob.bin
-%{_libdir}/obs-plugins/v8_context_snapshot.bin
-%{_libdir}/obs-plugins/vk_swiftshader_icd.json
 %endif
 #----------------------------------------------------------------------------
 
@@ -303,8 +296,7 @@ cd ..
 
 %autopatch -p1
 
-# Force C++20 for all targets (incl. obs-browser helper); CMAKE_CXX_STANDARD
-# alone is not always applied to CEF browser-helper subdir.
+# Force C++20 for CEF headers (concepts in cef_scoped_refptr.h).
 %cmake	-DUNIX_STRUCTURE=1 \
 	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
 	-DOBS_VERSION_OVERRIDE="%{version}" \
@@ -312,20 +304,21 @@ cd ..
 	-DCMAKE_CXX_STANDARD_REQUIRED=ON \
 	-DCMAKE_CXX_FLAGS="%{optflags} -std=c++20" \
 	-DENABLE_LIBFDK=ON \
-  	-DENABLE_JACK=ON \
+	-DENABLE_JACK=ON \
 %if %{with cef}
 	-DENABLE_BROWSER=ON \
 	-DCEF_ROOT_DIR=%{_libdir}/cef \
+	-DOBS_BROWSER_SYSTEM_CEF=ON \
 %else
-	-DBUILD_BROWSER=OFF \
+	-DENABLE_BROWSER=OFF \
 %endif
 	-DENABLE_WEBSOCKET=OFF \
 	-DBUILD_VST=OFF \
 	-DENABLE_NEW_MPEGTS_OUTPUT=OFF \
 	-DENABLE_AJA=OFF \
- 	-DENABLE_WEBRTC=OFF \
-  	-DENABLE_NATIVE_NVENC:BOOL=ON \
-  	-DENABLE_VPX=ON \
+	-DENABLE_WEBRTC=OFF \
+	-DENABLE_NATIVE_NVENC:BOOL=ON \
+	-DENABLE_VPX=ON \
 %ifnarch %{x86_64}
 	-DENABLE_QSV11=OFF \
 %endif
@@ -336,9 +329,3 @@ cd ..
 
 %install
 %ninja_install -C build
-
-echo '%%dir %{_libdir}/obs-plugins/locales' >browser.lang
-for i in %{buildroot}%{_libdir}/obs-plugins/locales/*.pak; do
-	L="`basename $i .pak`"
-	echo "%%lang($L) %{_libdir}/obs-plugins/locales/$L.pak*" >>browser.lang
-done
