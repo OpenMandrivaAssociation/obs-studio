@@ -46,6 +46,9 @@ Patch2:		no-w32-pthreads-dep.patch
 # System CEF: C++20, rpath into the CEF Release dir, system resources/locales,
 # do not bundle a private copy of libcef next to the plugin.
 Patch3:		obs-studio-system-cef.patch
+# CMake 4 writes SWIG_FLAGS into build.ninja without evaluating generator
+# expressions. Ninja then rejects the literal $<...>.
+Patch4:		obs-studio-swig-flags.patch
 
 BuildRequires:	cmake ninja
 BuildRequires:	freetype-devel

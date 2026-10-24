@@ -1,0 +1,48 @@
+--- a/shared/obs-scripting/obspython/CMakeLists.txt
++++ b/shared/obs-scripting/obspython/CMakeLists.txt
+@@ -21,10 +21,14 @@
+ 
+ include(UseSWIG)
+ 
+-set_source_files_properties(
+-  obspython.i
+-  PROPERTIES USE_TARGET_INCLUDE_DIRECTORIES TRUE SWIG_FLAGS $<$<PLATFORM_ID:Windows,Darwin>:-py3-stable-abi>
+-)
++# SWIG_FLAGS is copied into the Ninja command line without evaluating
++# generator expressions. CMake 4 / Ninja then rejects the literal $<...>.
++# -py3-stable-abi is only for the Windows and macOS Python builds.
++set(_obs_py_swig_props USE_TARGET_INCLUDE_DIRECTORIES TRUE)
++if(OS_WINDOWS OR OS_MACOS)
++  list(APPEND _obs_py_swig_props SWIG_FLAGS -py3-stable-abi)
++endif()
++set_source_files_properties(obspython.i PROPERTIES ${_obs_py_swig_props})
+ 
+ swig_add_library(obspython LANGUAGE python TYPE MODULE SOURCES obspython.i)
+ 
+@@ -84,16 +88,15 @@
+   )
+ endif()
+ 
+-set_property(
+-  TARGET obspython
+-  APPEND
+-  PROPERTY
+-    SWIG_COMPILE_DEFINITIONS
+-      "SWIG_TYPE_TABLE=obspython"
+-      "Py_ENABLE_SHARED=1"
+-      "SWIG_PYTHON_INTERPRETER_NO_DEBUG"
+-      "$<$<BOOL:${ENABLE_FRONTEND}>:ENABLE_FRONTEND>"
+-      "$<$<PLATFORM_ID:Windows>:MS_NO_COREDLL>"
+-)
++# An empty generator expression still becomes a bare -D in the SWIG command
++# (CMake's LIST:TRANSFORM PREPEND,-D). Keep Windows-only defines off this list.
++set(_obs_swig_defs "SWIG_TYPE_TABLE=obspython" "Py_ENABLE_SHARED=1" "SWIG_PYTHON_INTERPRETER_NO_DEBUG")
++if(ENABLE_FRONTEND)
++  list(APPEND _obs_swig_defs ENABLE_FRONTEND)
++endif()
++if(OS_WINDOWS)
++  list(APPEND _obs_swig_defs MS_NO_COREDLL)
++endif()
++set_property(TARGET obspython APPEND PROPERTY SWIG_COMPILE_DEFINITIONS ${_obs_swig_defs})
+ 
+ set_target_properties_obs(obspython PROPERTIES FOLDER scripting PREFIX "_" XCODE_ATTRIBUTE_STRIP_STYLE non-global)
