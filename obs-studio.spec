@@ -301,10 +301,14 @@ cd ..
 
 # Force C++20 for CEF headers (concepts in cef_scoped_refptr.h).
 # VST stays enabled: 32.2.2 shipped obs-vst.so, and BUILD_VST was not a cmake option.
+# CMake 4.5 scans every C++20 target and builds the std module. obs-browser
+# requests C++20 and does not import modules. The scan needs clang-scan-deps,
+# which the build root does not provide.
 %cmake	-DOBS_VERSION_OVERRIDE="%{version}" \
 	-DCMAKE_CXX_STANDARD=20 \
 	-DCMAKE_CXX_STANDARD_REQUIRED=ON \
 	-DCMAKE_CXX_FLAGS="%{optflags} -std=c++20" \
+	-DCMAKE_CXX_SCAN_FOR_MODULES=OFF \
 	-DENABLE_LIBFDK=ON \
 	-DENABLE_JACK=ON \
 %if %{with cef}
