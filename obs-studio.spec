@@ -26,15 +26,15 @@
 
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
-Version:	32.2.2
-Release:	%{?beta:0.%{beta}.}2
+Version:	33.0.0
+Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
 Source0:	https://github.com/obsproject/%{name}/archive/%{version}/%{name}-%{version}%{?beta:-%{beta}}.tar.gz
 # git submodules that have gone missing in 28.0 tarballs
-Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-3f0a2cdf378939ebe3c6f9ab36d4ea100c25aac2.tar.gz
-Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-1ef34bf48110c2a18184e50e41cd0b1a855e2147.tar.gz
+Source1:	https://github.com/obsproject/obs-browser/archive/obs-browser-85c7f2668936679b43329a9ee9f1e269d9bac812.tar.gz
+Source2:	https://github.com/obsproject/obs-websocket/archive/obs-websocket-e28f84975984340e84fc4879cfc05741cc0afde1.tar.gz
 #Source3:	https://github.com/obsproject/obs-amd-encoder/archive/5a1dafeddb4b37ca2ba2415cf88b40bff8aee428.tar.gz
 
 #Patch0:		obs-studio-27.1.0-linkage.patch
@@ -162,16 +162,16 @@ This package is in the Restricted repository because it requires x264 codec.
 %dir %{_datadir}/%{oname}/
 %{_datadir}/%{oname}/*
 %{_iconsdir}/hicolor/*/apps/*
-%dir %{_libdir}/%{oname}-plugins/
-%{_libdir}/%{oname}-plugins/frontend-tools.so
-%{_libdir}/%{oname}-plugins/image-source.so
-%{_libdir}/%{oname}-plugins/linux-*.so
-%{_libdir}/%{oname}-plugins/obs-*.so
+# 33.0 installs first-party plugins in obs-modules/core (soname 30).
+%dir %{_libdir}/obs-modules
+%dir %{_libdir}/obs-modules/core
+%{_libdir}/obs-modules/core/*
 %if %{with cef}
-%exclude %{_libdir}/%{oname}-plugins/obs-browser.so
+%exclude %{_libdir}/obs-modules/core/obs-browser.so*
+%exclude %{_libdir}/obs-modules/core/obs-browser-page
 %endif
-%{_libdir}/%{oname}-plugins/rtmp-services.so
-%{_libdir}/%{oname}-plugins/text-freetype2.so
+%exclude %{_libdir}/obs-modules/core/vlc-video.so*
+%exclude %{_libdir}/obs-modules/core/decklink*
 %{_libdir}/obs-scripting
 %{_libdir}/libobs-opengl.so*
 
@@ -186,7 +186,7 @@ Requires:	%{name} = %{EVRD}
 VLC player support plugin for OBS Studio
 
 %files plugin-vlc
-%{_libdir}/%{oname}-plugins/vlc-video.so
+%{_libdir}/obs-modules/core/vlc-video.so*
 
 #----------------------------------------------------------------------------
 
@@ -199,7 +199,7 @@ Requires:	%{name} = %{EVRD}
 DeckLink hardware support plugin for OBS Studio
 
 %files plugin-decklink
-%{_libdir}/%{oname}-plugins/decklink*.so
+%{_libdir}/obs-modules/core/decklink*
 
 #----------------------------------------------------------------------------
 %if %{with cef}
@@ -217,8 +217,8 @@ Uses the system Chromium Embedded Framework (cef package) and its
 system FFmpeg, so libcef and OBS share one libav*.
 
 %files plugin-browser
-%{_libdir}/obs-plugins/obs-browser.so
-%{_libdir}/obs-plugins/obs-browser-page
+%{_libdir}/obs-modules/core/obs-browser.so*
+%{_libdir}/obs-modules/core/obs-browser-page
 %endif
 #----------------------------------------------------------------------------
 
@@ -297,9 +297,8 @@ cd ..
 %autopatch -p1
 
 # Force C++20 for CEF headers (concepts in cef_scoped_refptr.h).
-%cmake	-DUNIX_STRUCTURE=1 \
-	-DOBS_MULTIARCH_SUFFIX=$(echo %{_lib} |sed -e 's,^lib,,') \
-	-DOBS_VERSION_OVERRIDE="%{version}" \
+# VST stays enabled: 32.2.2 shipped obs-vst.so, and BUILD_VST was not a cmake option.
+%cmake	-DOBS_VERSION_OVERRIDE="%{version}" \
 	-DCMAKE_CXX_STANDARD=20 \
 	-DCMAKE_CXX_STANDARD_REQUIRED=ON \
 	-DCMAKE_CXX_FLAGS="%{optflags} -std=c++20" \
@@ -313,12 +312,9 @@ cd ..
 	-DENABLE_BROWSER=OFF \
 %endif
 	-DENABLE_WEBSOCKET=OFF \
-	-DBUILD_VST=OFF \
 	-DENABLE_NEW_MPEGTS_OUTPUT=OFF \
 	-DENABLE_AJA=OFF \
 	-DENABLE_WEBRTC=OFF \
-	-DENABLE_NATIVE_NVENC:BOOL=ON \
-	-DENABLE_VPX=ON \
 %ifnarch %{x86_64}
 	-DENABLE_QSV11=OFF \
 %endif

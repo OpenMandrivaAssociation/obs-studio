@@ -1,7 +1,6 @@
-diff -upr a/cmake/linux/helpers.cmake b/cmake/linux/helpers.cmake
---- obs-studio-32.2.1/cmake/linux/helpers.cmake	2026-08-14 03:22:16.828244720 +0200
-+++ obs-studio-32.2.1/cmake/linux/helpers.cmake	2026-08-14 03:22:16.866663096 +0200
-@@ -161,7 +161,9 @@ function(set_target_properties_obs targe
+--- a/cmake/linux/helpers.cmake	2026-10-23 20:14:36.000000000 +0200
++++ b/cmake/linux/helpers.cmake	2026-10-24 02:31:45.413722497 +0200
+@@ -165,7 +165,9 @@
        )
      elseif(${target} STREQUAL obs-browser)
        message(DEBUG "Add Chromium Embedded Framework to project for obs-browser plugin...")
@@ -12,21 +11,15 @@ diff -upr a/cmake/linux/helpers.cmake b/cmake/linux/helpers.cmake
          get_target_property(imported_location CEF::Library IMPORTED_LOCATION_RELEASE)
  
          if(imported_location)
-diff -upr a/plugins/obs-browser/CMakeLists.txt b/plugins/obs-browser/CMakeLists.txt
---- obs-studio-32.2.1/plugins/obs-browser/CMakeLists.txt	2026-08-14 03:22:16.833706290 +0200
-+++ obs-studio-32.2.1/plugins/obs-browser/CMakeLists.txt	2026-08-14 03:22:16.866721196 +0200
-@@ -42,9 +42,21 @@ target_sources(
- 
- target_include_directories(obs-browser PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/deps")
- 
--target_compile_features(obs-browser PRIVATE cxx_std_17)
-+# CEF 128+ headers use C++20 concepts (std::same_as / std::derived_from).
-+target_compile_features(obs-browser PRIVATE cxx_std_20)
+--- a/plugins/obs-browser/CMakeLists.txt	2026-10-20 21:52:10.000000000 +0200
++++ b/plugins/obs-browser/CMakeLists.txt	2026-10-24 02:31:45.414062212 +0200
+@@ -48,6 +48,17 @@
+ target_compile_features(obs-browser PRIVATE cxx_std_20)
  target_link_libraries(obs-browser PRIVATE OBS::libobs OBS::frontend-api OBS::websocket-api nlohmann_json::nlohmann_json)
  
 +# Prefer the system CEF tree (libcef, Resources, locales) instead of bundling
-+# a private copy next to the plugin. CEF_ROOT_DIR is the OnlyOffice/OBS layout
-+# root, e.g. /usr/lib64/cef.
++# a private copy next to the plugin. CEF_ROOT_DIR is the distro CEF root,
++# e.g. /usr/lib64/cef.
 +option(OBS_BROWSER_SYSTEM_CEF "Link against system CEF; do not bundle libcef/resources" OFF)
 +if(OBS_BROWSER_SYSTEM_CEF)
 +  if(NOT CEF_ROOT_DIR)
@@ -38,10 +31,9 @@ diff -upr a/plugins/obs-browser/CMakeLists.txt b/plugins/obs-browser/CMakeLists.
  if(OS_WINDOWS)
    include(cmake/os-windows.cmake)
  elseif(OS_MACOS)
-diff -upr a/plugins/obs-browser/cmake/os-linux.cmake b/plugins/obs-browser/cmake/os-linux.cmake
---- obs-studio-32.2.1/plugins/obs-browser/cmake/os-linux.cmake	2026-08-14 03:22:16.838979109 +0200
-+++ obs-studio-32.2.1/plugins/obs-browser/cmake/os-linux.cmake	2026-08-14 03:22:16.866765467 +0200
-@@ -5,7 +5,20 @@ get_target_property(libdrm_include_direc
+--- a/plugins/obs-browser/cmake/os-linux.cmake	2026-10-20 21:52:10.000000000 +0200
++++ b/plugins/obs-browser/cmake/os-linux.cmake	2026-10-24 02:31:45.414478198 +0200
+@@ -5,7 +5,19 @@
  target_include_directories(obs-browser PRIVATE ${libdrm_include_directories})
  
  target_link_libraries(obs-browser PRIVATE CEF::Wrapper CEF::Library X11::X11)
@@ -49,8 +41,7 @@ diff -upr a/plugins/obs-browser/cmake/os-linux.cmake b/plugins/obs-browser/cmake
 +
 +# System CEF keeps libcef and its dlopen companions (libEGL, swiftshader, …)
 +# under ${CEF_ROOT_DIR}/Release. Distro cmake macros often set
-+# CMAKE_SKIP_RPATH=ON, so set an absolute rpath explicitly. Keep $ORIGIN so
-+# obs-browser-page (the subprocess) is still found next to the plugin.
++# CMAKE_SKIP_RPATH=ON, so set an absolute rpath explicitly.
 +if(CEF_ROOT_DIR)
 +  set(_obs_cef_libdir "${CEF_ROOT_DIR}/Release")
 +else()
@@ -63,11 +54,10 @@ diff -upr a/plugins/obs-browser/cmake/os-linux.cmake b/plugins/obs-browser/cmake
  
  target_sources(obs-browser PRIVATE drm-format.cpp drm-format.hpp)
  
-@@ -20,6 +33,11 @@ target_include_directories(browser-helpe
-                                                   "${CMAKE_CURRENT_SOURCE_DIR}/obs-browser-page")
+@@ -22,6 +34,10 @@
  
+ target_compile_features(browser-helper PRIVATE cxx_std_20)
  target_link_libraries(browser-helper PRIVATE CEF::Wrapper CEF::Library)
-+target_compile_features(browser-helper PRIVATE cxx_std_20)
 +if(OBS_BROWSER_SYSTEM_CEF)
 +  target_compile_definitions(browser-helper PRIVATE "OBS_SYSTEM_CEF_ROOT=\"${CEF_ROOT_DIR}\"")
 +endif()
@@ -75,7 +65,7 @@ diff -upr a/plugins/obs-browser/cmake/os-linux.cmake b/plugins/obs-browser/cmake
  
  target_sources(obs-browser PRIVATE deps/ip-string-posix.cpp)
  
-@@ -29,8 +47,8 @@ set(OBS_EXECUTABLE_DESTINATION "${OBS_PL
+@@ -31,8 +47,8 @@
  set_target_properties_obs(
    browser-helper
    PROPERTIES FOLDER plugins/obs-browser
@@ -86,15 +76,14 @@ diff -upr a/plugins/obs-browser/cmake/os-linux.cmake b/plugins/obs-browser/cmake
               PREFIX ""
               OUTPUT_NAME obs-browser-page)
  # cmake-format: on
-diff -upr a/plugins/obs-browser/obs-browser-plugin.cpp b/plugins/obs-browser/obs-browser-plugin.cpp
---- obs-studio-32.2.1/plugins/obs-browser/obs-browser-plugin.cpp	2026-08-14 03:22:16.844181747 +0200
-+++ obs-studio-32.2.1/plugins/obs-browser/obs-browser-plugin.cpp	2026-08-14 03:27:13.451303997 +0200
-@@ -316,6 +316,12 @@ static void BrowserInit(void)
+--- a/plugins/obs-browser/obs-browser-plugin.cpp	2026-10-20 21:52:10.000000000 +0200
++++ b/plugins/obs-browser/obs-browser-plugin.cpp	2026-10-24 02:31:45.415379932 +0200
+@@ -334,6 +334,12 @@
  #endif
  
  #if !defined(_WIN32) && !defined(__APPLE__)
 +#ifdef OBS_SYSTEM_CEF_ROOT
-+	/* Distro CEF keeps Resources/ next to Release/ (OnlyOffice/OBS layout).
++	/* Distro CEF keeps Resources/ next to Release/.
 +	 * Do not expect a private copy of paks/locales beside the plugin. */
 +	CefString(&settings.resources_dir_path) = OBS_SYSTEM_CEF_ROOT "/Resources";
 +	CefString(&settings.locales_dir_path) = OBS_SYSTEM_CEF_ROOT "/Resources/locales";
@@ -102,7 +91,7 @@ diff -upr a/plugins/obs-browser/obs-browser-plugin.cpp b/plugins/obs-browser/obs
  	// Override locale path from OBS binary path to plugin binary path
  	string locales = obs_get_module_binary_path(obs_current_module());
  	locales = locales.substr(0, locales.find_last_of('/') + 1);
-@@ -323,6 +329,7 @@ static void BrowserInit(void)
+@@ -341,6 +347,7 @@
  	BPtr<char> abs_locales = os_get_abs_path_ptr(locales.c_str());
  	CefString(&settings.locales_dir_path) = abs_locales;
  #endif
@@ -110,7 +99,7 @@ diff -upr a/plugins/obs-browser/obs-browser-plugin.cpp b/plugins/obs-browser/obs
  
  	std::string obs_locale = obs_get_locale();
  	std::string accepted_languages;
-@@ -367,6 +374,14 @@ static void BrowserInit(void)
+@@ -388,6 +395,14 @@
  	app = new BrowserApp(tex_sharing_avail, obs_get_nix_platform() == OBS_NIX_PLATFORM_WAYLAND);
  #endif
  
@@ -125,15 +114,15 @@ diff -upr a/plugins/obs-browser/obs-browser-plugin.cpp b/plugins/obs-browser/obs
  #ifdef _WIN32
  	CefExecuteProcess(args, app, nullptr);
  #endif
-@@ -751,6 +766,18 @@ bool obs_module_load(void)
+@@ -896,6 +911,18 @@
  	if (hwaccel) {
  		check_hwaccel_support();
  	}
 +#ifdef OBS_SYSTEM_CEF_ROOT
 +#ifdef ENABLE_WAYLAND
 +	/* System CEF uses ANGLE (and often Vulkan). OBS composites with Mesa
-+	 * EGL; eglCreateImageKHR on those dmabufs fails ("Cannot create
-+	 * EGLImage") and OnPaint is skipped → black Browser source. */
++	 * EGL; eglCreateImageKHR on those dmabufs fails and OnPaint is skipped,
++	 * which leaves the Browser source black. */
 +	if (hwaccel && obs_get_nix_platform() == OBS_NIX_PLATFORM_WAYLAND) {
 +		hwaccel = false;
 +		blog(LOG_INFO, "[obs-browser]: disabling GPU texture sharing "
