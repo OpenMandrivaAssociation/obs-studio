@@ -1,0 +1,13 @@
+--- a/cmake/linux/compilerconfig.cmake
++++ b/cmake/linux/compilerconfig.cmake
+@@ -85,3 +85,10 @@
+ endif()
+ 
+ add_compile_definitions($<$<CONFIG:DEBUG>:DEBUG> $<$<CONFIG:DEBUG>:_DEBUG> SIMDE_ENABLE_OPENMP)
++
++# libstdc++ is required to say `export module std`. Clang warns that the
++# name is reserved, and COMPILE_WARNING_AS_ERROR appends -Werror after the
++# other options, so the exception has to be part of that flag.
++if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
++  set(CMAKE_CXX_COMPILE_OPTIONS_WARNING_AS_ERROR -Werror -Wno-error=reserved-module-identifier)
++endif()
