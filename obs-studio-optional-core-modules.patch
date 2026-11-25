@@ -1,0 +1,49 @@
+--- a/libobs/obs-core-modules-loader-nix.c
++++ b/libobs/obs-core-modules-loader-nix.c
+@@ -21,12 +21,34 @@
+ #include <obs.h>
+ #include <util/dstr.h>
+ #include <util/platform.h>
++#include <string.h>
+ 
+ const char *core_module_bin = "../" OBS_PLUGIN_PATH "/%module%";
+ const char *core_module_data = "../" OBS_DATA_PATH "/obs-modules/core/%module%";
+ 
+ extern bool find_core_module(struct obs_runtime_module_info *info, obs_find_module_callback2_t callback, void *data);
+ 
++static bool core_module_is_optional(const char *name)
++{
++	/* Shipped in separate subpackages. A missing file must not stop
++	 * the core modules that follow it from loading. */
++	static const char *optional_modules[] = {
++		"decklink",
++		"decklink-captions",
++		"decklink-output-ui",
++		"obs-browser",
++		"vlc-video",
++	};
++	unsigned int i;
++
++	for (i = 0; i < sizeof(optional_modules) / sizeof(optional_modules[0]); i++) {
++		if (strcmp(optional_modules[i], name) == 0)
++			return true;
++	}
++
++	return false;
++}
++
+ void load_core_modules(obs_find_module_callback2_t callback, void *data)
+ {
+ 	char *core_bin_path = os_get_executable_path_ptr(core_module_bin);
+@@ -52,6 +74,11 @@
+ 		dstr_free(&data_path);
+ 
+ 		if (!found) {
++			if (core_module_is_optional(name)) {
++				blog(LOG_INFO, "Optional core module '%s' is not installed", name);
++				continue;
++			}
++
+ 			blog(LOG_ERROR, "Failed to load core module %s", name);
+ 			break;
+ 		}

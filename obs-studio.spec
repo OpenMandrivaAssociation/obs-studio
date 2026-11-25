@@ -27,7 +27,7 @@
 Summary:	Free and open source software for video recording and live streaming
 Name:		obs-studio
 Version:	33.0.3
-Release:	%{?beta:0.%{beta}.}1
+Release:	%{?beta:0.%{beta}.}2
 License:	GPLv2+
 Group:		Video
 Url:		https://obsproject.com
@@ -52,6 +52,11 @@ Patch4:		obs-studio-swig-flags.patch
 # libstdc++ must name its module std. Clang warns that the name is
 # reserved, and warnings are errors, so the std module would not build.
 Patch5:		obs-studio-std-module-werror.patch
+# OBS 33 stops loading core modules at the first missing file.
+# DeckLink and the browser plugin are optional subpackages and come
+# before obs-x264 and rtmp-services, so a default install never
+# reached the encoder or the RTMP service. VLC is optional too.
+Patch6:		obs-studio-optional-core-modules.patch
 
 BuildRequires:	cmake ninja
 # CMake scans C++20 sources with clang-scan-deps.
